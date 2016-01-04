@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 {
@@ -62,7 +63,9 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 		{
 			try
 			{
-				image = ImageIO.read(getDataFile("png"));
+				File file = getDataFile("png");
+
+				image = ImageIO.read(file);
 				if(image != null)
 					imageIcon = new QuickLookImageIcon(image, 16, 16);
 			}
