@@ -7,6 +7,8 @@ import com.jetbrains.cidr.execution.debugger.backend.LLValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 
+import java.lang.reflect.Field;
+
 public class QuickLookValue
 {
 	private EvaluationContext context;
@@ -29,13 +31,42 @@ public class QuickLookValue
 	{
 		return originalValue;
 	}
-	public String getPointer() throws ExecutionException, DBCannotEvaluateException
+	public DebuggerDriver getDebuggerDriver()
+	{
+		try
+		{
+			Field field = EvaluationContext.class.getDeclaredField("myDriver");
+			field.setAccessible(true);
+			return (DebuggerDriver)field.get(context);
+
+		}
+		catch(Exception e)
+		{}
+
+		return null;
+	}
+
+	public String getPointer() throws DBCannotEvaluateException
 	{
 		return value.getPointer();
 	}
 	public String getName()
 	{
 		return value.getName();
+	}
+
+
+	public boolean isValid()
+	{
+		return value.isValid();
+	}
+	public boolean isPointer()
+	{
+		return value.isPointer();
+	}
+	public boolean isNilPointer()
+	{
+		return value.isNilPointer();
 	}
 
 

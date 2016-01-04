@@ -22,8 +22,6 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 
 				if(debugValue.isValidPointer())
 				{
-					context.checkExpiration();
-
 					QuickLookValue quickLookValue = new QuickLookValue(value, debugValue, context);
 
 					for(QuickLookValueRendererFactory factory : QuickLookValueRendererFactory.EP_NAME.getExtensions())
@@ -32,7 +30,13 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 						{
 							QuickLookValueRenderer result = factory.createRenderer(quickLookValue);
 							if(result != null)
+							{
+								QuickLookContext quickLookContext = QuickLookContext.contextForEvaluationContext(context);
+								if(quickLookContext != null)
+									quickLookContext.addValueRenderer(result);
+
 								return result;
+							}
 						}
 						catch(Exception e)
 						{}
