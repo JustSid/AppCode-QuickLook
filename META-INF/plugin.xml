@@ -1,0 +1,37 @@
+<idea-plugin version="2">
+    <id>com.widerwille.quicklook</id>
+    <name>QuickLook support for LLDB</name>
+    <version>1.0</version>
+    <vendor email="justsid@widerwille.com" url="http://widerwille.com">Sidney Just</vendor>
+
+    <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+    </change-notes>
+
+
+    <idea-version since-build="141"/>
+    <depends>com.intellij.modules.appcode</depends>
+
+    <extensionPoints>
+        <extensionPoint qualifiedName="com.widerwille.quicklook.quickLookValueRendererFactory" interface="com.widerwille.quicklook.QuickLookValueRendererFactory" />
+    </extensionPoints>
+
+
+
+
+    <extensions defaultExtensionNs="cidr.debugger">
+        <customValueRendererFactory implementation="com.widerwille.quicklook.QuickLookCustomValueRendererFactory" />
+    </extensions>
+
+    <extensions defaultExtensionNs="com.widerwille.quicklook">
+        <quickLookValueRendererFactory implementation="com.widerwille.quicklook.QuickLookDefaultValueRendererFactory" />
+    </extensions>
+
+</idea-plugin>
