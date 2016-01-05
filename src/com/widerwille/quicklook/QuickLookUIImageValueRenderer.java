@@ -23,6 +23,8 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 	@Nullable
 	public String getDisplayValue()
 	{
+		getImage();
+
 		if(image == null)
 			return "<Unknown image>";
 

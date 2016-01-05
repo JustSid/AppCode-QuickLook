@@ -100,6 +100,21 @@ public class QuickLookValueRenderer extends ValueRenderer
 				String eval = "memory read -o " + dataFile.getPath() + " -b --force " + bytesPointer.getPointer() + " 0x" + Long.toHexString(pointer + length.getIntValue());
 
 				value.getDebuggerDriver().executeConsoleCommand(eval);
+
+				// Give the command some time to complete
+				int iteration = 0;
+				while(dataFile.length() < length.getIntValue() && iteration < 10)
+				{
+					Thread.sleep(100);
+					iteration ++;
+				}
+
+				// Aaaaand give up...
+				if(iteration >= 10 && dataFile.length() < length.getIntValue())
+				{
+					dataFile.delete();
+					dataFile = null;
+				}
 			}
 			catch(Exception e)
 			{
