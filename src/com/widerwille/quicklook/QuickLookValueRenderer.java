@@ -153,7 +153,10 @@ public class QuickLookValueRenderer extends ValueRenderer
 			{
 				QuickLookValue dataValue = getDataValue();
 				if(dataValue == null || !dataValue.isValid() || !dataValue.isKindOfClass("NSData"))
+				{
+					dataFailCount ++;
 					return null;
+				}
 
 				dataFile = File.createTempFile("lldbOutput", "." + extension);
 
