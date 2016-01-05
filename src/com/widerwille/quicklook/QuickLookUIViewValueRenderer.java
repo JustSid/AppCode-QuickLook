@@ -23,13 +23,6 @@ public class QuickLookUIViewValueRenderer extends QuickLookValueRenderer
 	}
 
 	@Override
-	@Nullable
-	public String getDisplayValue()
-	{
-		return getQuickLookValue().getDescription();
-	}
-
-	@Override
 	public boolean hasImageContent()
 	{
 		return true;

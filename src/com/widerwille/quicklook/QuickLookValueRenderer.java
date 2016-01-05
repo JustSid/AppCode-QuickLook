@@ -65,7 +65,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 	@Nullable
 	public String getDisplayValue()
 	{
-		return null;
+		return value.getDescription();
 	}
 
 	@Override
@@ -118,20 +118,23 @@ public class QuickLookValueRenderer extends ValueRenderer
 	}
 	public BufferedImage getImageContent()
 	{
-		if(image == null)
+		synchronized(this)
 		{
-			try
+			if(image == null)
 			{
-				File file = getDataFile("png");
+				try
+				{
+					File file = getDataFile("png");
 
-				image = ImageIO.read(file);
-				if(image != null)
-					imageIcon = new QuickLookImageIcon(image, 16, 16);
-			}
-			catch(Exception e)
-			{
-				image = null;
-				imageIcon = null;
+					image = ImageIO.read(file);
+					if(image != null)
+						imageIcon = new QuickLookImageIcon(image, 16, 16);
+				}
+				catch(Exception e)
+				{
+					image = null;
+					imageIcon = null;
+				}
 			}
 		}
 
