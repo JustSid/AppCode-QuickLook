@@ -7,13 +7,17 @@ import com.jetbrains.cidr.execution.debugger.evaluation.renderers.ValueRenderer;
 import org.antlr.v4.runtime.misc.Nullable;
 import org.jetbrains.annotations.NotNull;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class QuickLookValueRenderer extends ValueRenderer
 {
 	private QuickLookValue value;
 	private File dataFile = null;
+	private BufferedImage image;
+	private QuickLookImageIcon imageIcon;
 
 	public QuickLookValueRenderer(QuickLookValue value)
 	{
@@ -33,7 +37,10 @@ public class QuickLookValueRenderer extends ValueRenderer
 	@Nullable
 	public Icon getIcon()
 	{
-		return null;
+		if(hasImageContent())
+			getImageContent();
+
+		return imageIcon;
 	}
 
 	@Nullable
@@ -75,13 +82,39 @@ public class QuickLookValueRenderer extends ValueRenderer
 	{
 		return value;
 	}
-	public QuickLookValue getDataValue()
+
+
+	public boolean hasImageContent()
+	{
+		return false;
+	}
+	public BufferedImage getImageContent()
+	{
+		if(image == null)
+		{
+			try
+			{
+				File file = getDataFile("png");
+
+				image = ImageIO.read(file);
+				if(image != null)
+					imageIcon = new QuickLookImageIcon(image, 16, 16);
+			}
+			catch(Exception e)
+			{
+				image = null;
+				imageIcon = null;
+			}
+		}
+
+		return image;
+	}
+
+	protected QuickLookValue getDataValue()
 	{
 		return null;
 	}
-
-
-	public File getDataFile(String extension)
+	protected File getDataFile(String extension)
 	{
 		if(dataFile == null)
 		{

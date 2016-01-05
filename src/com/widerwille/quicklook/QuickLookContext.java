@@ -9,10 +9,12 @@ public class QuickLookContext
 {
 	private EvaluationContext context;
 	private ArrayList<QuickLookValueRenderer> renderers = new ArrayList<>();
+	private QuickLookManager manager;
 
-	public QuickLookContext(EvaluationContext context)
+	public QuickLookContext(EvaluationContext context, QuickLookManager manager)
 	{
 		this.context = context;
+		this.manager = manager;
 	}
 
 	public void prune()
@@ -24,6 +26,9 @@ public class QuickLookContext
 	public void addValueRenderer(QuickLookValueRenderer renderer)
 	{
 		renderers.add(renderer);
+
+		if(renderer.hasImageContent())
+			manager.addContentRenderer(renderer);
 	}
 
 	public EvaluationContext getContext()

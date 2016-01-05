@@ -14,6 +14,8 @@ import java.util.TimerTask;
 public class QuickLookManager implements ProjectComponent
 {
 	private ArrayList<QuickLookContext> contexts = new ArrayList<>();
+	private ArrayList<QuickLookValueRenderer> contentRenderers = new ArrayList<>();
+
 	private boolean isPruning = false;
 	private QuickLookToolWindow thumbnailUI = null;
 
@@ -53,26 +55,52 @@ public class QuickLookManager implements ProjectComponent
 				return context;
 		}
 
-		QuickLookContext context = new QuickLookContext(tcontext);
+		QuickLookContext context = new QuickLookContext(tcontext, this);
 		contexts.add(context);
 
 		beginPruning();
+
+		QuickLookManager manager = this;
 
 		ApplicationManager.getApplication().invokeLater(new Runnable()
 		{
 			@Override
 			public void run()
 			{
-				if(thumbnailUI == null)
+				synchronized(contexts)
 				{
-					thumbnailUI = new QuickLookToolWindow(context.getProject());
-					thumbnailUI.setVisible(true);
+					if(thumbnailUI == null)
+					{
+						thumbnailUI = new QuickLookToolWindow(context.getProject(), manager);
+						thumbnailUI.setVisible(true);
+						thumbnailUI.refresh(contentRenderers);
+					}
 				}
 			}
 		});
 
-
 		return context;
+	}
+
+	public void addContentRenderer(QuickLookValueRenderer renderer)
+	{
+		synchronized(contexts)
+		{
+			contentRenderers.add(renderer);
+		}
+
+		ApplicationManager.getApplication().invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				synchronized(contexts)
+				{
+					if(thumbnailUI != null)
+						thumbnailUI.refresh(contentRenderers);
+				}
+			}
+		});
 	}
 
 	private void beginPruning()

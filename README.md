@@ -7,11 +7,9 @@ a complete list of supported types in Xcode for reference can be found [here](ht
 
 # Current limitations and future plans
 
-Right now it only works with Objective-C, there is no Swift support whatsoever. Additionally, images render as 16x16 point previews,
-so large images will look rather ugly. On top of that, gathering the image data is quite slow at the moment, and I'm not sure if there is much
-that can be done about that that. I am planning on bringing in a larger image preview pane though, similar to the "Show image previews" option in IDEA.
+Right now it only works with Objective-C, there is no Swift support whatsoever.
 
-Also, of course, support for all the Xcode supported data types.
+Also, of course, support for all the Xcode supported data types is planned
 
 I also want to make a sane plugin API to support arbitrary type renderings and easy access to getting data out of the app, technically this
 would be AppCodes job, but why re-invent the wheel and rewrite the methods I've been writing (as long as official support is missing that is, of course)
@@ -20,7 +18,8 @@ would be AppCodes job, but why re-invent the wheel and rewrite the methods I've 
 
 Just to give you an idea of what's there already:
 
-![Screenshot](./Screenshot.png)
+![Screenshot](./Screenshot0.png)
+![Screenshot](./Screenshot1.png)
 
 # License
 
