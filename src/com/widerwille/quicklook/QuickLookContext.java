@@ -23,6 +23,11 @@ public class QuickLookContext
 			renderer.close();
 	}
 
+	public ArrayList<QuickLookValueRenderer> getRenderers()
+	{
+		return renderers;
+	}
+
 	public void addValueRenderer(QuickLookValueRenderer renderer)
 	{
 		renderers.add(renderer);

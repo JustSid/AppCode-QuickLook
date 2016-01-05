@@ -89,18 +89,7 @@ public class QuickLookManager implements ProjectComponent
 			contentRenderers.add(renderer);
 		}
 
-		ApplicationManager.getApplication().invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				synchronized(contexts)
-				{
-					if(thumbnailUI != null)
-						thumbnailUI.refresh(contentRenderers);
-				}
-			}
-		});
+		updateUI();
 	}
 
 	private void beginPruning()
@@ -123,6 +112,22 @@ public class QuickLookManager implements ProjectComponent
 		}
 	}
 
+	private void updateUI()
+	{
+		ApplicationManager.getApplication().invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				synchronized(contexts)
+				{
+					if(thumbnailUI != null)
+						thumbnailUI.refresh(contentRenderers);
+				}
+			}
+		});
+	}
+
 	private void pruneContexts()
 	{
 		synchronized(contexts)
@@ -132,9 +137,18 @@ public class QuickLookManager implements ProjectComponent
 				QuickLookContext context = contexts.get(i);
 				if(!isContextValid(context.getContext()))
 				{
-					context.prune();
+					ArrayList<QuickLookValueRenderer> renderers = context.getRenderers();
+					for(QuickLookValueRenderer renderer : renderers)
+					{
+						if(renderer.hasImageContent())
+							contentRenderers.remove(renderer);
+					}
 
+					context.prune();
 					contexts.remove(i);
+
+					updateUI();
+
 					i --;
 				}
 			}
