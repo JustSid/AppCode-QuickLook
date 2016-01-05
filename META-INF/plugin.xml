@@ -25,6 +25,11 @@
 
 
 
+    <project-components>
+        <component>
+            <implementation-class>com.widerwille.quicklook.QuickLookManager</implementation-class>
+        </component>
+    </project-components>
 
     <extensions defaultExtensionNs="cidr.debugger">
         <customValueRendererFactory implementation="com.widerwille.quicklook.QuickLookCustomValueRendererFactory" />

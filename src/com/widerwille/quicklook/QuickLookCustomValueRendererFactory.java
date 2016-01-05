@@ -31,7 +31,9 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 							QuickLookValueRenderer result = factory.createRenderer(quickLookValue);
 							if(result != null)
 							{
-								QuickLookContext quickLookContext = QuickLookContext.contextForEvaluationContext(context);
+								QuickLookManager manager = context.getFrame().getProcess().getProject().getComponent(QuickLookManager.class);
+								QuickLookContext quickLookContext = manager.contextForEvaluationContext(context);
+
 								if(quickLookContext != null)
 									quickLookContext.addValueRenderer(result);
 
