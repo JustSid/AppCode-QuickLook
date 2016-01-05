@@ -41,29 +41,41 @@ public class QuickLookThumbnailComponent extends JComponent
 		{
 			Graphics2D g2d = (Graphics2D)g;
 
-			g2d.setComposite(AlphaComposite.Src);
+			//g2d.setComposite(AlphaComposite.Src);
 			g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 			g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER , 1.0f));
 		}
 
 		// Image
 		{
 			BufferedImage image = valueRenderer.getImageContent();
 
-			float widthFactor = (getThumbnailWidth() - 10) / (float) image.getWidth();
-			float heightFactor = (getThumbnailHeight() - 10) / (float) image.getHeight();
+			float widthFactor = getThumbnailWidth() / (float) image.getWidth();
+			float heightFactor = getThumbnailHeight() / (float) image.getHeight();
 
-			float factor = (widthFactor > heightFactor) ? widthFactor : heightFactor;
+			float factor = (widthFactor > heightFactor) ? heightFactor : widthFactor;
 			if(factor > 1.0f)
 				factor = 1.0f;
 
 			int width = (int) (image.getWidth() * factor);
 			int height = (int) (image.getHeight() * factor);
 
-			int x = (int) ((getWidth() - width) * 0.5);
+			int x = (int)((getWidth() - width) * 0.5);
+			int y = (int)(((getHeight() - 20) - height) * 0.5);
 
-			g.drawImage(image, x, 5, width, height, null);
+			g.drawImage(image, x, y, width, height, null);
+		}
+
+		// Type icon
+		{
+			Icon icon = valueRenderer.getTypeIcon();
+			if(icon != null)
+			{
+				icon.paintIcon(null, g, getWidth() - 20, getHeight() - 32);
+			}
 		}
 
 		// Name
@@ -77,16 +89,6 @@ public class QuickLookThumbnailComponent extends JComponent
 
 			g.setColor(getForeground());
 			g.drawString(text, x, y);
-		}
-
-		// Type icon
-		{
-			Icon icon = valueRenderer.getTypeIcon();
-			if(icon != null)
-			{
-				g.setColor(new Color(0, 0, 0, 0));
-				icon.paintIcon(null, g, getWidth() - 20, getHeight() - 32);
-			}
 		}
 	}
 }

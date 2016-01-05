@@ -59,7 +59,7 @@ public class QuickLookToolWindow
 
 		list.setCellRenderer(cellRenderer);
 		list.setVisibleRowCount(-1);
-		list.setFixedCellWidth(91);
+		list.setFixedCellWidth(76);
 		list.setFixedCellHeight(96);
 
 		ThumbnailsMouseAdapter mouseListener = new ThumbnailsMouseAdapter();
