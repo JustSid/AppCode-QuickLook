@@ -78,5 +78,15 @@ public class QuickLookThumbnailComponent extends JComponent
 			g.setColor(getForeground());
 			g.drawString(text, x, y);
 		}
+
+		// Type icon
+		{
+			Icon icon = valueRenderer.getTypeIcon();
+			if(icon != null)
+			{
+				g.setColor(new Color(0, 0, 0, 0));
+				icon.paintIcon(null, g, getWidth() - 20, getHeight() - 32);
+			}
+		}
 	}
 }

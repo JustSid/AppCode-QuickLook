@@ -44,6 +44,12 @@ public class QuickLookValueRenderer extends ValueRenderer
 	}
 
 	@Nullable
+	public Icon getTypeIcon()
+	{
+		return null;
+	}
+
+	@Nullable
 	public String getType()
 	{
 		return value.getValue().getBestType();
