@@ -24,6 +24,9 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 		if(value.isKindOfClass("UIImage"))
 			return new QuickLookUIImageValueRenderer(value);
 
+		if(value.isKindOfClass("UIView"))
+			return new QuickLookUIViewValueRenderer(value);
+
 		return null;
 	}
 }
