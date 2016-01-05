@@ -45,6 +45,18 @@ public class QuickLookValue
 
 		return null;
 	}
+	public String getDescription()
+	{
+		try
+		{
+			return sendMessage("description").sendMessage("UTF8String").getValue().getReadableValue();
+		}
+		catch(Exception e)
+		{}
+
+		return null;
+	}
+
 
 	public String getPointer() throws DBCannotEvaluateException
 	{
