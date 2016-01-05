@@ -16,6 +16,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 {
 	private QuickLookValue value;
 	private File dataFile = null;
+	private int dataFailCount = 0;
 	private BufferedImage image;
 	private QuickLookImageIcon imageIcon;
 
@@ -145,6 +146,9 @@ public class QuickLookValueRenderer extends ValueRenderer
 	{
 		if(dataFile == null)
 		{
+			if(dataFailCount >= 3)
+				return null;
+
 			try
 			{
 				QuickLookValue dataValue = getDataValue();
@@ -182,6 +186,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 					dataFile.delete();
 
 				dataFile = null;
+				dataFailCount ++;
 			}
 		}
 
