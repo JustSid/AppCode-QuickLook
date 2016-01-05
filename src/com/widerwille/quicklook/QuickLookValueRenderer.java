@@ -88,6 +88,15 @@ public class QuickLookValueRenderer extends ValueRenderer
 
 		return icon;
 	}
+
+	@Override
+	public boolean computeHasChildren(@NotNull EvaluationContext evaluationContext) throws ExecutionException
+	{
+		if(shouldPrintChildrenConsoleDescription())
+			return super.computeHasChildren(evaluationContext);
+
+		return false;
+	}
 	@Override
 	protected boolean shouldPrintChildrenConsoleDescription()
 	{
