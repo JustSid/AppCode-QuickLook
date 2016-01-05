@@ -159,7 +159,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 				Long pointer = Long.parseLong(bytesPointer.getPointer().substring(2), 16);
 				String eval = "memory read -o " + dataFile.getPath() + " -b --force " + bytesPointer.getPointer() + " 0x" + Long.toHexString(pointer + length.getIntValue());
 
-				value.getDebuggerDriver().executeConsoleCommand(eval);
+				dataValue.executeCommand(eval);
 
 				// Give the command some time to complete
 				int iteration = 0;

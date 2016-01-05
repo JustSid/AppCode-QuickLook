@@ -115,7 +115,7 @@ public class QuickLookValue
 	}
 
 
-	public String getStringValue()
+	public void refresh()
 	{
 		String expression = value.getReferenceExpression();
 		if(expression != null && expression.length() > 0)
@@ -128,7 +128,11 @@ public class QuickLookValue
 			catch(Exception e)
 			{}
 		}
+	}
 
+	public String getStringValue()
+	{
+		refresh();
 		return value.getValue();
 	}
 	public float getFloatValue()
@@ -138,5 +142,11 @@ public class QuickLookValue
 	public int getIntValue()
 	{
 		return Integer.parseInt(getStringValue());
+	}
+
+
+	public void executeCommand(String command) throws ExecutionException
+	{
+		getDebuggerDriver().executeConsoleCommand(command);
 	}
 }
