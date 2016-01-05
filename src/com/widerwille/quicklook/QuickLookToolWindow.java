@@ -17,13 +17,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 import org.intellij.images.editor.impl.ImageEditorManagerImpl;
-import org.intellij.images.options.EditorOptions;
-import org.intellij.images.options.Options;
-import org.intellij.images.options.OptionsManager;
-import org.intellij.images.options.TransparencyChessboardOptions;
 import org.intellij.images.thumbnail.actionSystem.ThumbnailViewActions;
-import org.intellij.images.ui.ImageComponent;
-import org.intellij.images.ui.ThumbnailComponentUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,24 +57,10 @@ public class QuickLookToolWindow
 
 		cellRenderer = new QuickLookThumbnailCellRenderer();
 
-		ImageComponent imageComponent = cellRenderer.getImageComponent();
-		Options options = OptionsManager.getInstance().getOptions();
-		EditorOptions editorOptions = options.getEditorOptions();
-
-		TransparencyChessboardOptions chessboardOptions = editorOptions.getTransparencyChessboardOptions();
-		imageComponent.setTransparencyChessboardVisible(chessboardOptions.isShowDefault());
-		imageComponent.setTransparencyChessboardCellSize(chessboardOptions.getCellSize());
-		imageComponent.setTransparencyChessboardWhiteColor(chessboardOptions.getWhiteColor());
-		imageComponent.setTransparencyChessboardBlankColor(chessboardOptions.getBlackColor());
-
 		list.setCellRenderer(cellRenderer);
 		list.setVisibleRowCount(-1);
-
-		ThumbnailComponentUI componentUI = (ThumbnailComponentUI)UIManager.getUI(cellRenderer);
-		Dimension preferredSize = componentUI.getPreferredSize(cellRenderer);
-
-		list.setFixedCellWidth(preferredSize.width);
-		list.setFixedCellHeight(preferredSize.height);
+		list.setFixedCellWidth(91);
+		list.setFixedCellHeight(96);
 
 		ThumbnailsMouseAdapter mouseListener = new ThumbnailsMouseAdapter();
 		list.addMouseListener(mouseListener);

@@ -1,12 +1,9 @@
 package com.widerwille.quicklook;
 
-import org.intellij.images.ui.ImageComponent;
-import org.intellij.images.ui.ThumbnailComponent;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class QuickLookThumbnailCellRenderer extends ThumbnailComponent implements ListCellRenderer
+public class QuickLookThumbnailCellRenderer implements ListCellRenderer
 {
 	public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus)
 	{
@@ -14,27 +11,21 @@ public class QuickLookThumbnailCellRenderer extends ThumbnailComponent implement
 			return null;
 
 		QuickLookValueRenderer renderer = (QuickLookValueRenderer)value;
+		QuickLookThumbnailComponent component = new QuickLookThumbnailComponent();
 
-		setFileName(renderer.getValue().getName());
-		setToolTipText(renderer.getDisplayValue());
-		setDirectory(false);
-		setFileSize(0);
-		setFormat("");
-
-		ImageComponent imageComponent = getImageComponent();
-		imageComponent.getDocument().setValue(renderer.getImageContent());
+		component.setValueRenderer(renderer);
 
 		if(isSelected)
 		{
-			setForeground(list.getSelectionForeground());
-			setBackground(list.getSelectionBackground());
+			component.setForeground(list.getSelectionForeground());
+			component.setBackground(list.getSelectionBackground());
 		}
 		else
 		{
-			setForeground(list.getForeground());
-			setBackground(list.getBackground());
+			component.setForeground(list.getForeground());
+			component.setBackground(list.getBackground());
 		}
 
-		return this;
+		return component;
 	}
 }

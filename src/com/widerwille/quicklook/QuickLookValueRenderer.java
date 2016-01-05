@@ -44,6 +44,18 @@ public class QuickLookValueRenderer extends ValueRenderer
 	}
 
 	@Nullable
+	public String getType()
+	{
+		return value.getValue().getBestType();
+	}
+
+	@Nullable
+	public String getName()
+	{
+		return value.getValue().getName();
+	}
+
+	@Nullable
 	public String getDisplayValue()
 	{
 		return null;
