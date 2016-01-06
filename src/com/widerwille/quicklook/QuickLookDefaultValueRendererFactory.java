@@ -11,6 +11,7 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 	@Nullable
 	public QuickLookValueRenderer createRenderer(QuickLookValue value) throws Exception
 	{
+		// iOS / UIKit
 		if(value.isKindOfClass("UIColor"))
 			return new QuickLookUIColorValueRenderer(value);
 
@@ -29,6 +30,14 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 
 		if(value.isKindOfClass("UIBezierPath"))
 			return new QuickLookUIBezierPathValueRenderer(value);
+
+		// OS X / AppKit
+
+		if(value.isKindOfClass("NSImage"))
+			return new QuickLookNSImageValueRenderer(value);
+		if(value.isKindOfClass("NSBitmapImageRep"))
+			return new QuickLookNSBitmapImageRepValueRenderer(value);
+
 
 		return null;
 	}
