@@ -1,4 +1,5 @@
 .DS_Store
 /out/
-.idea/workspace.xml
-.idea/uiDesigner.xml
+workspace.xml
+uiDesigner.xml
+xcuserdata
