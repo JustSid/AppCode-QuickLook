@@ -27,6 +27,9 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 		if(value.isKindOfClass("UIView"))
 			return new QuickLookUIViewValueRenderer(value);
 
+		if(value.isKindOfClass("UIBezierPath"))
+			return new QuickLookUIBezierPathValueRenderer(value);
+
 		return null;
 	}
 }
