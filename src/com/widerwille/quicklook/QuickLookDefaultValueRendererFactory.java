@@ -32,6 +32,8 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 			return new QuickLookUIBezierPathValueRenderer(value);
 
 		// OS X / AppKit
+		if(value.isKindOfClass("NSColor"))
+			return new QuickLookUIColorValueRenderer(value);
 
 		if(value.isKindOfClass("NSImage"))
 			return new QuickLookNSImageValueRenderer(value);
