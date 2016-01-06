@@ -12,6 +12,8 @@ import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.openapi.wm.WindowManager;
+import com.intellij.ui.IdeBorderFactory;
+import com.intellij.ui.SideBorder;
 import com.intellij.ui.awt.RelativePoint;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
@@ -20,6 +22,7 @@ import org.intellij.images.editor.impl.ImageEditorManagerImpl;
 import org.intellij.images.thumbnail.actionSystem.ThumbnailViewActions;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -36,6 +39,7 @@ public class QuickLookToolWindow
 
 	private JPanel content;
 	private JList list;
+	private JScrollPane scrollPane;
 
 	private static String TOOLWINDOW_ID = "com.widerwille.quicklook.toolwindow";
 	private static Icon icon = IconLoader.getIcon("/icons/quick-look.png");
@@ -61,6 +65,8 @@ public class QuickLookToolWindow
 		list.setVisibleRowCount(-1);
 		list.setFixedCellWidth(76);
 		list.setFixedCellHeight(96);
+
+		scrollPane.setBorder(IdeBorderFactory.createBorder(SideBorder.TOP));
 
 		ThumbnailsMouseAdapter mouseListener = new ThumbnailsMouseAdapter();
 		list.addMouseListener(mouseListener);

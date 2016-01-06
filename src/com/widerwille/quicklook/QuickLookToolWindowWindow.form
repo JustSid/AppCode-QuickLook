@@ -7,7 +7,7 @@
     <properties/>
     <border type="none"/>
     <children>
-      <scrollpane id="4dcdf">
+      <scrollpane id="4dcdf" binding="scrollPane">
         <constraints border-constraint="Center"/>
         <properties>
           <horizontalScrollBarPolicy value="31"/>
