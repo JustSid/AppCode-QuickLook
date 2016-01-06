@@ -10,6 +10,12 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 {
 	public ValueRenderer createRenderer(CidrPhysicalValue value, LLValue lldbValue, EvaluationContext context)
 	{
+		QuickLookManager manager = context.getFrame().getProcess().getProject().getComponent(QuickLookManager.class);
+		QuickLookContext quickLookContext = manager.contextForEvaluationContext(context);
+
+		if(quickLookContext == null)
+			return null;
+
 		if(lldbValue.isValidPointer() && lldbValue.isNSObject())
 		{
 			try
@@ -31,12 +37,7 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 							QuickLookValueRenderer result = factory.createRenderer(quickLookValue);
 							if(result != null)
 							{
-								QuickLookManager manager = context.getFrame().getProcess().getProject().getComponent(QuickLookManager.class);
-								QuickLookContext quickLookContext = manager.contextForEvaluationContext(context);
-
-								if(quickLookContext != null)
-									quickLookContext.addValueRenderer(result);
-
+								quickLookContext.addValueRenderer(result);
 								return result;
 							}
 						}
