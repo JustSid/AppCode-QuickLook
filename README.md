@@ -4,12 +4,18 @@ Plugin that aims to provide similar functionality to Xcode's QuickLook debug ren
 
 # Currently supported
 
-Right now this plugin only supports iOS and Objective-C. Here is a list of supported renderers for that platform
+Right now this plugin only supports Objective-C. Furthermore, not all types supported by Xcode are supported in this plugin, however, these types are supported:
 
 * UIImage
+* NSImage
+* NSBitmapImageRep
 * UIImageView
+* NSImageView
 * UIColor
-* UIView subclasses
+* NSColor
+* UIBezierPath
+* UIView classes
+* NSView classes
 * Custom classes that implement `debugQuickLookObject` and which return one of the above objects
 
 # Screenshots
