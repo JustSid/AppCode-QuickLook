@@ -1,0 +1,74 @@
+package com.widerwille.quicklook;
+
+import com.intellij.openapi.util.IconLoader;
+import org.jetbrains.annotations.Nullable;
+
+import javax.swing.*;
+import java.awt.image.BufferedImage;
+
+public class QuickLookNSViewValueRenderer extends QuickLookValueRenderer
+{
+	private static Icon TypeIcon = IconLoader.getIcon("/types/UIView.png");
+	private QuickLookValue data;
+
+	QuickLookNSViewValueRenderer(QuickLookValue type)
+	{
+		super(type);
+	}
+
+	@Override
+	@Nullable
+	public String getDisplayValue()
+	{
+		BufferedImage image = getImageContent();
+
+		if(image == null)
+			return "<Unknown image>";
+
+		return "{" + image.getWidth() + ", " + image.getHeight() + "}";
+	}
+
+	@Override
+	@Nullable
+	public Icon getTypeIcon()
+	{
+		return TypeIcon;
+	}
+
+	@Override
+	public boolean hasImageContent()
+	{
+		return true;
+	}
+
+	@Override
+	@Nullable
+	protected QuickLookValue getDataValue()
+	{
+		try
+		{
+			if(data == null)
+			{
+				QuickLookValue value = getQuickLookValue();
+				QuickLookValue bitmapRef = value.createVariable("NSBitmapImageRep *", "bitmapRef");
+
+				value.evaluate(bitmapRef.getName() + " = (NSBitmapImageRep *)[(NSView *)" + value.getPointer() + " bitmapImageRepForCachingDisplayInRect:(NSRect)[(NSView *)" + value.getPointer() + " bounds]]");
+				bitmapRef.refresh();
+				bitmapRef.sendMessage("setSize:(CGSize)((CGRect)[(NSView *)" + value.getPointer() + " bounds]).size");
+
+				value.sendMessage("cacheDisplayInRect:(CGSize)((CGRect)[(NSView *)" + value.getPointer() + " bounds]).size toBitmapImageRep:(NSBitmapImageRep *)" + bitmapRef.getPointer(), "void");
+
+				data = value.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getPointer() + " representationUsingType:4 properties:nil]");
+
+				if(!data.isValid() || !data.isPointer())
+					data = null;
+			}
+		}
+		catch(Exception e)
+		{
+			data = null;
+		}
+
+		return data;
+	}
+}

@@ -35,10 +35,20 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 		if(value.isKindOfClass("NSColor"))
 			return new QuickLookUIColorValueRenderer(value);
 
+		if(value.isKindOfClass("NSImageView"))
+		{
+			value = value.sendMessage("image");
+			if(value.isNilPointer())
+				return null;
+		}
+
 		if(value.isKindOfClass("NSImage"))
 			return new QuickLookNSImageValueRenderer(value);
 		if(value.isKindOfClass("NSBitmapImageRep"))
 			return new QuickLookNSBitmapImageRepValueRenderer(value);
+
+		if(value.isKindOfClass("NSView"))
+			return new QuickLookNSViewValueRenderer(value);
 
 
 		return null;

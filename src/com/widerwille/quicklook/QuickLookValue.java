@@ -115,6 +115,10 @@ public class QuickLookValue
 	{
 		return evaluate("[(" + value.getBestType() + ")(" + getPointer() + ") " + message + "]");
 	}
+	public QuickLookValue sendMessage(String message, String returnType) throws ExecutionException, DBCannotEvaluateException
+	{
+		return evaluate("(" + returnType + ")[(" + value.getBestType() + ")(" + getPointer() + ") " + message + "]");
+	}
 
 
 	public QuickLookValue createVariable(String type, String name) throws ExecutionException, DBCannotEvaluateException
