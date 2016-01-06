@@ -127,7 +127,10 @@ public class QuickLookToolWindow
 					index = -1;
 					list.clearSelection();
 				}
+			}
 
+			if(index != -1)
+			{
 				if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() == 2)
 				{
 					DefaultListModel model = (DefaultListModel)list.getModel();
