@@ -101,7 +101,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 	@Override
 	protected boolean shouldPrintChildrenConsoleDescription()
 	{
-		return false;
+		return true;
 	}
 
 
