@@ -1,6 +1,7 @@
 package com.widerwille.quicklook;
 
 import com.intellij.execution.ExecutionException;
+import com.jetbrains.cidr.execution.debugger.backend.DBUserException;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import com.jetbrains.cidr.execution.debugger.evaluation.renderers.ValueRenderer;
@@ -70,40 +71,25 @@ public class QuickLookValueRenderer extends ValueRenderer
 
 	@Override
 	@NotNull
-	public String computeValue(@NotNull EvaluationContext context) throws ExecutionException
+	public String doComputeValue(@NotNull EvaluationContext context) throws ExecutionException, DBUserException
 	{
 		String value = getDisplayValue();
 		if(value == null)
-			return super.computeValue(context);
+			return super.doComputeValue(context);
 
 		return value;
 	}
 
 	@Override
-	public Icon getIcon(boolean b, CidrPhysicalValue value)
+	public Icon getIcon(boolean b)
 	{
 		Icon icon = getIcon();
 
 		if(icon == null)
-			return super.getIcon(b, value);
+			return super.getIcon(b);
 
 		return icon;
 	}
-
-	@Override
-	public boolean computeHasChildren(@NotNull EvaluationContext evaluationContext) throws ExecutionException
-	{
-		if(shouldPrintChildrenConsoleDescription())
-			return super.computeHasChildren(evaluationContext);
-
-		return false;
-	}
-	@Override
-	protected boolean shouldPrintChildrenConsoleDescription()
-	{
-		return true;
-	}
-
 
 
 	public QuickLookValue getQuickLookValue()

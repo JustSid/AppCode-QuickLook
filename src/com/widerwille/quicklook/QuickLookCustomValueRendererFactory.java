@@ -1,14 +1,19 @@
 package com.widerwille.quicklook;
 
+import com.intellij.execution.ExecutionException;
+import com.jetbrains.cidr.execution.debugger.CidrDebuggerSettings;
 import com.jetbrains.cidr.execution.debugger.backend.LLValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.CustomValueRendererFactory;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import com.jetbrains.cidr.execution.debugger.evaluation.renderers.ValueRenderer;
+import org.jetbrains.annotations.Nullable;
 
 public class QuickLookCustomValueRendererFactory implements CustomValueRendererFactory
 {
-	public ValueRenderer createRenderer(CidrPhysicalValue value, LLValue lldbValue, EvaluationContext context)
+	@Override
+	@Nullable
+	public ValueRenderer createRendererLeading(CidrDebuggerSettings settings, CidrPhysicalValue value, LLValue lldbValue, EvaluationContext context) throws ExecutionException
 	{
 		QuickLookManager manager = context.getFrame().getProcess().getProject().getComponent(QuickLookManager.class);
 		QuickLookContext quickLookContext = manager.contextForEvaluationContext(context);
@@ -42,16 +47,25 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 							}
 						}
 						catch(Exception e)
-						{}
+						{
+						}
 					}
 
 				}
 			}
 			catch(Exception e)
-			{}
+			{
+			}
 		}
 
 		return null;
 	}
 
+	@Override
+	@Nullable
+	public ValueRenderer createRendererTrailing(CidrDebuggerSettings settings, CidrPhysicalValue value, LLValue lldbValue, EvaluationContext context) throws ExecutionException
+	{
+		return null;
+	}
 }
+

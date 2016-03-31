@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.widerwille.quicklook</id>
     <name>QuickLook</name>
-    <version>0.8</version>
+    <version>0.8.1</version>
     <vendor email="justsid@widerwille.com" url="http://widerwille.com">Sidney Just</vendor>
 
     <description><![CDATA[
@@ -26,7 +26,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
-      </ul>
+    <ul><h3><b>0.8.1</b></h3>
+      <li>Fixed AppCode 2016.1 crash</li>
+      <li>Removed behaviour that would stop child descriptions from being printed</li>
+    </ul>
       <ul><h3><b>0.8</b></h3>
       <li>Initial release</li>
     </ul>
@@ -34,7 +37,7 @@
     </change-notes>
 
 
-    <idea-version since-build="141"/>
+    <idea-version since-build="145"/>
     <depends>com.intellij.modules.appcode</depends>
 
     <extensionPoints>
