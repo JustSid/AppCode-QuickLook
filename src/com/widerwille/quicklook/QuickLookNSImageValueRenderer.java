@@ -1,14 +1,57 @@
 package com.widerwille.quicklook;
 
+import com.intellij.openapi.util.Key;
+import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
+import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import org.jetbrains.annotations.Nullable;
-
-import java.awt.image.BufferedImage;
 
 public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 {
+	private static final Key<Boolean> IS_NSIMAGE = Key.create("IS_NSIMAGE");
+
 	private QuickLookValue data;
 
-	QuickLookNSImageValueRenderer(QuickLookValue type)
+	public static QuickLookValueRenderer createRendererIfPossible(QuickLookValue value)
+	{
+		try
+		{
+			CidrPhysicalValue physicalValue = value.getPhysicalValue();
+			EvaluationContext context = value.getContext().getUnderlyingContext();
+
+
+			String type = physicalValue.getType();
+			Boolean isImage = context.getCachedTypeInfo(type, IS_NSIMAGE);
+
+			if(isImage == null)
+			{
+				isImage = isImageType(value);
+				context.putCachedTypeInfo(type, IS_NSIMAGE, isImage);
+			}
+
+			if(isImage)
+				return new QuickLookNSImageValueRenderer(value);
+		}
+		catch(Exception e)
+		{}
+
+		return null;
+	}
+
+	private static boolean isImageType(QuickLookValue value)
+	{
+		try
+		{
+			return value.isKindOfClass("NSImage");
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+
+
+
+	protected QuickLookNSImageValueRenderer(QuickLookValue type)
 	{
 		super(type);
 	}

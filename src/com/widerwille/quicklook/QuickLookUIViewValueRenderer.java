@@ -1,13 +1,58 @@
 package com.widerwille.quicklook;
 
+import com.intellij.openapi.util.Key;
+import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
+import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import org.jetbrains.annotations.Nullable;
 
 
 public class QuickLookUIViewValueRenderer extends QuickLookValueRenderer
 {
+	private static final Key<Boolean> IS_UIVIEW = Key.create("IS_UIVIEW");
+
 	private QuickLookValue data;
 
-	QuickLookUIViewValueRenderer(QuickLookValue type)
+	public static QuickLookValueRenderer createRendererIfPossible(QuickLookValue value)
+	{
+		try
+		{
+			CidrPhysicalValue physicalValue = value.getPhysicalValue();
+			EvaluationContext context = value.getContext().getUnderlyingContext();
+
+
+			String type = physicalValue.getType();
+			Boolean isView = context.getCachedTypeInfo(type, IS_UIVIEW);
+
+			if(isView == null)
+			{
+				isView = isViewType(value);
+				context.putCachedTypeInfo(type, IS_UIVIEW, isView);
+			}
+
+			if(isView)
+				return new QuickLookUIViewValueRenderer(value);
+		}
+		catch(Exception e)
+		{}
+
+		return null;
+	}
+
+	private static boolean isViewType(QuickLookValue value)
+	{
+		try
+		{
+			return value.isKindOfClass("UIView");
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+
+
+
+	protected QuickLookUIViewValueRenderer(QuickLookValue type)
 	{
 		super(type);
 	}

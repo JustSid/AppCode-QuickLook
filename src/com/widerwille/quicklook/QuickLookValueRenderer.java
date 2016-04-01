@@ -25,7 +25,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 	private BufferedImage image;
 	private QuickLookImageIcon imageIcon;
 
-	public QuickLookValueRenderer(QuickLookValue value)
+	protected QuickLookValueRenderer(QuickLookValue value)
 	{
 		super(value.getPhysicalValue());
 
