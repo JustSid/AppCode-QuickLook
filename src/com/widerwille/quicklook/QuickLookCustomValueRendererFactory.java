@@ -15,12 +15,6 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 	@Nullable
 	public ValueRenderer createRendererLeading(CidrDebuggerSettings settings, CidrPhysicalValue value, LLValue lldbValue, EvaluationContext context) throws ExecutionException
 	{
-		QuickLookManager manager = context.getFrame().getProcess().getProject().getComponent(QuickLookManager.class);
-		//QuickLookContext quickLookContext = manager.contextForEvaluationContext(context);
-
-		//if(quickLookContext == null)
-		//	return null;
-
 		if(lldbValue.isValidPointer() && lldbValue.isNSObject())
 		{
 			try
@@ -40,11 +34,7 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 						try
 						{
 							QuickLookValueRenderer result = factory.createRenderer(quickLookValue);
-							if(result != null)
-							{
-								//quickLookContext.addValueRenderer(result);
-								return result;
-							}
+							return result;
 						}
 						catch(Exception e)
 						{

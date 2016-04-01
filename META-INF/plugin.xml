@@ -44,13 +44,7 @@
         <extensionPoint qualifiedName="com.widerwille.quicklook.quickLookValueRendererFactory" interface="com.widerwille.quicklook.QuickLookValueRendererFactory" />
     </extensionPoints>
 
-
-
-    <project-components>
-        <component>
-            <implementation-class>com.widerwille.quicklook.QuickLookManager</implementation-class>
-        </component>
-    </project-components>
+    
 
     <extensions defaultExtensionNs="cidr.debugger">
         <customValueRendererFactory implementation="com.widerwille.quicklook.QuickLookCustomValueRendererFactory" />
