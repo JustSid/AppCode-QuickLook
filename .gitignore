@@ -1,5 +1,12 @@
+**/.idea/*.iml
+**/.idea/workspace.xml
+**/.idea/tasks.xml
+**/.idea/vcs.xml
+**/.idea/misc.xml
+**/.idea/dictionaries
+
 .DS_Store
 /out/
-workspace.xml
-uiDesigner.xml
 xcuserdata
+
+QuickLook.jar
