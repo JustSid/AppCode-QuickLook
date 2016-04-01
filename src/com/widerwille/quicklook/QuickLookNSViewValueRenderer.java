@@ -2,8 +2,6 @@ package com.widerwille.quicklook;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.image.BufferedImage;
-
 public class QuickLookNSViewValueRenderer extends QuickLookValueRenderer
 {
 	private QuickLookValue data;
@@ -11,18 +9,6 @@ public class QuickLookNSViewValueRenderer extends QuickLookValueRenderer
 	QuickLookNSViewValueRenderer(QuickLookValue type)
 	{
 		super(type);
-	}
-
-	@Override
-	@Nullable
-	public String getDisplayValue()
-	{
-		BufferedImage image = getImageContent();
-
-		if(image == null)
-			return "<Unknown image>";
-
-		return "{" + image.getWidth() + ", " + image.getHeight() + "}";
 	}
 
 	@Override
@@ -47,9 +33,9 @@ public class QuickLookNSViewValueRenderer extends QuickLookValueRenderer
 				context.evaluate(bitmapRef.getName() + " = (NSBitmapImageRep *)[(NSView *)" + value.getPointer() + " bitmapImageRepForCachingDisplayInRect:(NSRect)[(NSView *)" + value.getPointer() + " bounds]]");
 
 				bitmapRef.refresh();
-				bitmapRef.sendMessage("setSize:(CGSize)((CGRect)[(NSView *)" + value.getPointer() + " bounds]).size");
+				bitmapRef.sendMessage("setSize:(NSSize)((NSRect)[(NSView *)" + value.getPointer() + " bounds]).size");
 
-				value.sendMessage("cacheDisplayInRect:(CGSize)((CGRect)[(NSView *)" + value.getPointer() + " bounds]).size toBitmapImageRep:(NSBitmapImageRep *)" + bitmapRef.getPointer(), "void");
+				value.sendMessage("cacheDisplayInRect:((NSRect)[(NSView *)" + value.getPointer() + " bounds]) toBitmapImageRep:(NSBitmapImageRep *)" + bitmapRef.getPointer(), "void");
 
 				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getPointer() + " representationUsingType:4 properties:nil]");
 
