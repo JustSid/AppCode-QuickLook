@@ -1,12 +1,13 @@
 <idea-plugin version="2">
     <id>com.widerwille.quicklook</id>
     <name>QuickLook</name>
-    <version>0.8.1</version>
+    <version>0.9</version>
     <vendor email="justsid@widerwille.com" url="http://widerwille.com">Sidney Just</vendor>
 
     <description><![CDATA[
       <p>Plugin that brings support for QuickLook in the debugger, similar to Xcode's content renderers. This is currently somewhere between
-      alpha and beta, and I would be happy to receive bug reports on the projects <a href="https://github.com/JustSid/AppCode-QuickLook/issues">Github page</a>. Currently supported are the following
+      alpha and beta, and I would be happy to receive bug reports on the projects <a href="https://github.com/JustSid/AppCode-QuickLook/issues">Github page</a>. The plugin will
+      insert a "QuickLook" link next to supported variables in the debugger, clicking it will bring up the QuickLook content viewer for that type. Currently supported are the following
       types:</p>
       </ul>
         <li>UIImage, NSImage, NSBitmapImageRep</li>
@@ -17,15 +18,15 @@
         <li>Custom classes that implement <code>debugQuickLookObject</code> and which return one of the above objects</li>
       </ul>
 
-      <p>Screenshot:<br />
-      <img src="http://f.cl.ly/items/002m2Z1O1K3c3o2Y2f3H/preview.png" />
-      </p>
-
       <p>The plugins source code is available under the MIT license on <a href="https://github.com/JustSid/AppCode-QuickLook">Github</a></p>
 
     ]]></description>
 
     <change-notes><![CDATA[
+     <ul><h3><b>0.9</b></h3>
+      <li>Major UI improvement: A QuickLook "link" is now displayed in the debugger similar to how IntelliJ IDEA does it. Clicking it will bring up the QuickLook</li>
+      <li>All values are now lazily evaluated and cached, resulting in major performance improvements</li>
+    </ul>
     <ul><h3><b>0.8.1</b></h3>
       <li>Fixed AppCode 2016.1 crash</li>
       <li>Removed behaviour that would stop child descriptions from being printed</li>
@@ -43,7 +44,6 @@
     <extensionPoints>
         <extensionPoint qualifiedName="com.widerwille.quicklook.quickLookValueRendererFactory" interface="com.widerwille.quicklook.QuickLookValueRendererFactory" />
     </extensionPoints>
-
     
 
     <extensions defaultExtensionNs="cidr.debugger">
