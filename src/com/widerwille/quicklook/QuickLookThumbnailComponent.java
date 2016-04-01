@@ -69,15 +69,6 @@ public class QuickLookThumbnailComponent extends JComponent
 			g.drawImage(image, x, y, width, height, null);
 		}
 
-		// Type icon
-		{
-			Icon icon = valueRenderer.getTypeIcon();
-			if(icon != null)
-			{
-				icon.paintIcon(null, g, getWidth() - 20, getHeight() - 32);
-			}
-		}
-
 		// Name
 		{
 			String text = valueRenderer.getName();

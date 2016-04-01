@@ -16,10 +16,10 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 	public ValueRenderer createRendererLeading(CidrDebuggerSettings settings, CidrPhysicalValue value, LLValue lldbValue, EvaluationContext context) throws ExecutionException
 	{
 		QuickLookManager manager = context.getFrame().getProcess().getProject().getComponent(QuickLookManager.class);
-		QuickLookContext quickLookContext = manager.contextForEvaluationContext(context);
+		//QuickLookContext quickLookContext = manager.contextForEvaluationContext(context);
 
-		if(quickLookContext == null)
-			return null;
+		//if(quickLookContext == null)
+		//	return null;
 
 		if(lldbValue.isValidPointer() && lldbValue.isNSObject())
 		{
@@ -42,7 +42,7 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 							QuickLookValueRenderer result = factory.createRenderer(quickLookValue);
 							if(result != null)
 							{
-								quickLookContext.addValueRenderer(result);
+								//quickLookContext.addValueRenderer(result);
 								return result;
 							}
 						}
@@ -54,8 +54,7 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 				}
 			}
 			catch(Exception e)
-			{
-			}
+			{}
 		}
 
 		return null;

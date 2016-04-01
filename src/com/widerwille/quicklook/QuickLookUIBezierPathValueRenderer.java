@@ -7,19 +7,11 @@ import javax.swing.*;
 
 public class QuickLookUIBezierPathValueRenderer extends QuickLookValueRenderer
 {
-	private static Icon TypeIcon = IconLoader.getIcon("/types/UIBezierPath.png");
 	private QuickLookValue data;
 
 	QuickLookUIBezierPathValueRenderer(QuickLookValue type)
 	{
 		super(type);
-	}
-
-	@Override
-	@Nullable
-	public Icon getTypeIcon()
-	{
-		return TypeIcon;
 	}
 
 	@Override

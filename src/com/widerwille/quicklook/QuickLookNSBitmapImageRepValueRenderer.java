@@ -1,14 +1,11 @@
 package com.widerwille.quicklook;
 
-import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 
 public class QuickLookNSBitmapImageRepValueRenderer extends QuickLookValueRenderer
 {
-	private static Icon TypeIcon = IconLoader.getIcon("/types/UIImage.png");
 	private QuickLookValue data;
 
 	QuickLookNSBitmapImageRepValueRenderer(QuickLookValue type)
@@ -26,13 +23,6 @@ public class QuickLookNSBitmapImageRepValueRenderer extends QuickLookValueRender
 			return "<Unknown image>";
 
 		return "{" + image.getWidth() + ", " + image.getHeight() + "}";
-	}
-
-	@Override
-	@Nullable
-	public Icon getTypeIcon()
-	{
-		return TypeIcon;
 	}
 
 	@Override

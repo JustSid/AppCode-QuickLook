@@ -1,14 +1,10 @@
 package com.widerwille.quicklook;
 
-import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
-import java.awt.image.BufferedImage;
 
 public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 {
-	private static Icon TypeIcon = IconLoader.getIcon("/types/UIImage.png");
 	private QuickLookValue data;
 
 	QuickLookUIImageValueRenderer(QuickLookValue type)
@@ -20,19 +16,22 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 	@Nullable
 	public String getDisplayValue()
 	{
-		BufferedImage image = getImageContent();
+		try
+		{
+			QuickLookValue value = getQuickLookValue();
 
-		if(image == null)
-			return "<Unknown image>";
+			QuickLookValue width = value.createVariable("CGFloat", "width");
+			QuickLookValue height = value.createVariable("CGFloat", "height");
 
-		return "{" + image.getWidth() + ", " + image.getHeight() + "}";
-	}
-
-	@Override
-	@Nullable
-	public Icon getTypeIcon()
-	{
-		return TypeIcon;
+			value.evaluate(width.getName() + " = [((UIImage *)" + value.getPointer() + ") size].width");
+			value.evaluate(height.getName() + " = [((UIImage *)" + value.getPointer() + ") size].height");
+			
+			return "{" + width.getFloatValue() + ", " + height.getFloatValue() + "}";
+		}
+		catch(Exception e)
+		{
+			return "<unknown image>";
+		}
 	}
 
 	@Override

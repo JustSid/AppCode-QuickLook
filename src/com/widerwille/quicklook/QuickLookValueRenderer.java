@@ -1,17 +1,21 @@
 package com.widerwille.quicklook;
 
 import com.intellij.execution.ExecutionException;
+import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
+import com.jetbrains.cidr.execution.debugger.CidrDebugProcess;
 import com.jetbrains.cidr.execution.debugger.backend.DBUserException;
-import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
+import com.jetbrains.cidr.execution.debugger.backend.DebuggerDriver;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
+import com.jetbrains.cidr.execution.debugger.evaluation.XValueNodeExpirable;
 import com.jetbrains.cidr.execution.debugger.evaluation.renderers.ValueRenderer;
-import org.antlr.v4.runtime.misc.Nullable;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.reflect.Field;
 
 public class QuickLookValueRenderer extends ValueRenderer
 {
@@ -35,18 +39,8 @@ public class QuickLookValueRenderer extends ValueRenderer
 		dataFile = null;
 	}
 
-
 	@Nullable
 	public Icon getIcon()
-	{
-		if(hasImageContent())
-			getImageContent();
-
-		return imageIcon;
-	}
-
-	@Nullable
-	public Icon getTypeIcon()
 	{
 		return null;
 	}
@@ -69,10 +63,57 @@ public class QuickLookValueRenderer extends ValueRenderer
 		return value.getDescription();
 	}
 
+
 	@Override
 	@NotNull
 	public String doComputeValue(@NotNull EvaluationContext context) throws ExecutionException, DBUserException
 	{
+		if(hasImageContent())
+		{
+			try
+			{
+				// In German we have a saying "through the back and chest into the eye", meaning a bullet finding
+				// its way into the eye in the most complicated way possible
+				// Well, this is exactly that! But I can't seem to find another way to access the XValueNodeImpl
+				// so I can get my own full value evaluator in...
+
+				Field field = EvaluationContext.class.getDeclaredField("myExpirable");
+				field.setAccessible(true);
+				XValueNodeExpirable expirable = (XValueNodeExpirable)field.get(context);
+
+				field = XValueNodeExpirable.class.getDeclaredField("myNode");
+				field.setAccessible(true);
+
+				XValueNodeImpl node = (XValueNodeImpl)field.get(expirable);
+
+				if(node != null)
+				{
+					CidrDebugProcess process = context.getFrame().getProcess();
+
+					process.postCommand(new CidrDebugProcess.DebuggerImplicitCommand() {
+
+						public void run(@NotNull DebuggerDriver driver) throws ExecutionException
+						{
+							QuickLookFullValueEvaluator evaluator = new QuickLookFullValueEvaluator(process, new QuickLookFullValueEvaluator.Evaluator()
+							{
+								@Override
+								public BufferedImage evaluate()
+								{
+									return getImageContent();
+								}
+
+							});
+
+							node.setFullValueEvaluator(evaluator);
+						}
+
+					});
+				}
+			}
+			catch(Exception e)
+			{}
+		}
+
 		String value = getDisplayValue();
 		if(value == null)
 			return super.doComputeValue(context);
