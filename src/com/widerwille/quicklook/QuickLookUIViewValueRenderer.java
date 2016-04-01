@@ -27,23 +27,25 @@ public class QuickLookUIViewValueRenderer extends QuickLookValueRenderer
 			if(data == null)
 			{
 				QuickLookValue value = getQuickLookValue();
-				QuickLookValue image = value.createVariable("UIImage *", "image");
-				QuickLookValue layer = value.createVariable("CALayer *", "layer");
-				QuickLookValue context = value.createVariable("CGContextRef", "context");
+				QuickLookEvaluationContext context = value.getContext();
 
-				value.evaluate(layer.getName() + " = (CALayer *)[(UIView *)" + value.getPointer() + " layer]");
+				QuickLookValue image = context.createVariable("UIImage *", "image");
+				QuickLookValue layer = context.createVariable("CALayer *", "layer");
+				QuickLookValue cgContext = context.createVariable("CGContextRef", "context");
 
-				value.evaluate("(void)UIGraphicsBeginImageContextWithOptions(((CGRect)[((UIView *)" + value.getPointer() + ") bounds]).size, (BOOL)[((UIView *)" + value.getPointer() + ") isOpaque], 0.0)");
-				value.evaluate(context.getName() + " = (CGContextRef)UIGraphicsGetCurrentContext()");
+				context.evaluate(layer.getName() + " = (CALayer *)[(UIView *)" + value.getPointer() + " layer]");
 
-				context.refresh();
+				context.evaluate("(void)UIGraphicsBeginImageContextWithOptions(((CGRect)[((UIView *)" + value.getPointer() + ") bounds]).size, (BOOL)[((UIView *)" + value.getPointer() + ") isOpaque], 0.0)");
+				context.evaluate(cgContext.getName() + " = (CGContextRef)UIGraphicsGetCurrentContext()");
 
-				value.evaluate("((void(*)(id, SEL, CGContextRef))objc_msgSend)((id)" + layer.getName() + ", (SEL)NSSelectorFromString(@\"" + "renderInContext:" + "\"), " + context.getName() + ")");
-				value.evaluate(image.getName() + " = (UIImage *)UIGraphicsGetImageFromCurrentImageContext()");
-				value.evaluate("(void)UIGraphicsEndImageContext()");
+				cgContext.refresh();
+
+				context.evaluate("((void(*)(id, SEL, CGContextRef))objc_msgSend)((id)" + layer.getName() + ", (SEL)NSSelectorFromString(@\"" + "renderInContext:" + "\"), " + cgContext.getName() + ")");
+				context.evaluate(image.getName() + " = (UIImage *)UIGraphicsGetImageFromCurrentImageContext()");
+				context.evaluate("(void)UIGraphicsEndImageContext()");
 
 				image.refresh();
-				data = value.evaluate("(NSData *)UIImagePNGRepresentation((UIImage *)" + image.getPointer() + ")");
+				data = context.evaluate("(NSData *)UIImagePNGRepresentation((UIImage *)" + image.getPointer() + ")");
 
 				if(!data.isValid() || !data.isPointer())
 					data = null;

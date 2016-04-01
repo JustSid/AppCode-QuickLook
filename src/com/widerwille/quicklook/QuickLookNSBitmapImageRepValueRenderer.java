@@ -40,8 +40,9 @@ public class QuickLookNSBitmapImageRepValueRenderer extends QuickLookValueRender
 			if(data == null)
 			{
 				QuickLookValue value = getQuickLookValue();
+				QuickLookEvaluationContext context = value.getContext();
 
-				data = value.evaluate("(NSData *)[(NSBitmapImageRep *)" + value.getPointer() + " representationUsingType:4 properties:nil]");
+				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + value.getPointer() + " representationUsingType:4 properties:nil]");
 
 				if(!data.isValid() || !data.isPointer())
 					data = null;

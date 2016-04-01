@@ -40,15 +40,18 @@ public class QuickLookNSViewValueRenderer extends QuickLookValueRenderer
 			if(data == null)
 			{
 				QuickLookValue value = getQuickLookValue();
-				QuickLookValue bitmapRef = value.createVariable("NSBitmapImageRep *", "bitmapRef");
+				QuickLookEvaluationContext context = value.getContext();
 
-				value.evaluate(bitmapRef.getName() + " = (NSBitmapImageRep *)[(NSView *)" + value.getPointer() + " bitmapImageRepForCachingDisplayInRect:(NSRect)[(NSView *)" + value.getPointer() + " bounds]]");
+				QuickLookValue bitmapRef = context.createVariable("NSBitmapImageRep *", "bitmapRef");
+
+				context.evaluate(bitmapRef.getName() + " = (NSBitmapImageRep *)[(NSView *)" + value.getPointer() + " bitmapImageRepForCachingDisplayInRect:(NSRect)[(NSView *)" + value.getPointer() + " bounds]]");
+
 				bitmapRef.refresh();
 				bitmapRef.sendMessage("setSize:(CGSize)((CGRect)[(NSView *)" + value.getPointer() + " bounds]).size");
 
 				value.sendMessage("cacheDisplayInRect:(CGSize)((CGRect)[(NSView *)" + value.getPointer() + " bounds]).size toBitmapImageRep:(NSBitmapImageRep *)" + bitmapRef.getPointer(), "void");
 
-				data = value.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getPointer() + " representationUsingType:4 properties:nil]");
+				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getPointer() + " representationUsingType:4 properties:nil]");
 
 				if(!data.isValid() || !data.isPointer())
 					data = null;

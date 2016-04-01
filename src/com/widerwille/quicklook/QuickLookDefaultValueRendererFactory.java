@@ -1,5 +1,6 @@
 package com.widerwille.quicklook;
 
+import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import org.antlr.v4.runtime.misc.Nullable;
 
 public class QuickLookDefaultValueRendererFactory implements QuickLookValueRendererFactory
@@ -9,8 +10,39 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 
 	@Override
 	@Nullable
-	public QuickLookValueRenderer createRenderer(QuickLookValue value) throws Exception
+	public QuickLookValueRenderer createRenderer(QuickLookValue value, QuickLookEvaluationContext context) throws Exception
 	{
+		/*CidrPhysicalValue physicalValue = value.getOriginalValue();
+		String type = physicalValue.getType();*/
+
+
+		/*
+		       try {
+            String var3 = var0.getType();
+            Boolean var4 = (Boolean)var2.getCachedTypeInfo(var3, IS_STRUCT);
+            if(var4 == null) {
+                var4 = Boolean.valueOf(var0.getTypesHelper().isStructType(var0, var2));
+                var2.putCachedTypeInfo(var3, IS_STRUCT, var4);
+            }
+
+            StructValueRenderer var10000;
+            try {
+                if(var4.booleanValue()) {
+                    var10000 = new StructValueRenderer(var0, var1);
+                    return var10000;
+                }
+            } catch (DBUserException var5) {
+                throw var5;
+            }
+
+            var10000 = null;
+            return var10000;
+        } catch (DBUserException var6) {
+            return null;
+        }
+		 */
+
+
 		// iOS / UIKit
 		if(value.isKindOfClass("UIColor"))
 			return new QuickLookUIColorValueRenderer(value);

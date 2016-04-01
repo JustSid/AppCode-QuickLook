@@ -27,14 +27,14 @@ public class QuickLookCustomValueRendererFactory implements CustomValueRendererF
 
 				if(debugValue.isValidPointer())
 				{
-					QuickLookValue quickLookValue = new QuickLookValue(value, debugValue, context);
+					QuickLookEvaluationContext quicklookContext = new QuickLookEvaluationContext(context);
+					QuickLookValue quickLookValue = new QuickLookValue(value, debugValue, quicklookContext);
 
 					for(QuickLookValueRendererFactory factory : QuickLookValueRendererFactory.EP_NAME.getExtensions())
 					{
 						try
 						{
-							QuickLookValueRenderer result = factory.createRenderer(quickLookValue);
-							return result;
+							return factory.createRenderer(quickLookValue, quicklookContext);
 						}
 						catch(Exception e)
 						{

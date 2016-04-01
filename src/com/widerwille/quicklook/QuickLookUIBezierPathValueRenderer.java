@@ -1,9 +1,6 @@
 package com.widerwille.quicklook;
 
-import com.intellij.openapi.util.IconLoader;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.*;
 
 public class QuickLookUIBezierPathValueRenderer extends QuickLookValueRenderer
 {
@@ -29,25 +26,27 @@ public class QuickLookUIBezierPathValueRenderer extends QuickLookValueRenderer
 			if(data == null)
 			{
 				QuickLookValue value = getQuickLookValue();
-				QuickLookValue image = value.createVariable("UIImage *", "image");
-				QuickLookValue context = value.createVariable("CGContextRef", "context");
+				QuickLookEvaluationContext context = value.getContext();
 
-				value.evaluate("(void)UIGraphicsBeginImageContextWithOptions(((CGRect)[((UIBezierPath *)" + value.getPointer() + ") bounds]).size, NO, 0.0)");
-				value.evaluate(context.getName() + " = (CGContextRef)UIGraphicsGetCurrentContext()");
+				QuickLookValue image = context.createVariable("UIImage *", "image");
+				QuickLookValue cgContext = context.createVariable("CGContextRef", "context");
 
-				context.refresh();
+				context.evaluate("(void)UIGraphicsBeginImageContextWithOptions(((CGRect)[((UIBezierPath *)" + value.getPointer() + ") bounds]).size, NO, 0.0)");
+				context.evaluate(cgContext.getName() + " = (CGContextRef)UIGraphicsGetCurrentContext()");
 
-				value.evaluate("(void)[(UIColor *)[UIColor colorWithRed:0.176 green:0.541 blue:1.0 alpha:0.6] setFill]");
-				value.evaluate("(void)[(UIBezierPath *)" + value.getPointer() + " fill]");
+				cgContext.refresh();
 
-				value.evaluate("(void)[(UIColor *)[UIColor colorWithRed:0.176 green:0.541 blue:1.0 alpha:1.0] setStroke]");
-				value.evaluate("(void)[(UIBezierPath *)" + value.getPointer() + " stroke]");
+				context.evaluate("(void)[(UIColor *)[UIColor colorWithRed:0.176 green:0.541 blue:1.0 alpha:0.6] setFill]");
+				context.evaluate("(void)[(UIBezierPath *)" + value.getPointer() + " fill]");
 
-				value.evaluate(image.getName() + " = (UIImage *)UIGraphicsGetImageFromCurrentImageContext()");
-				value.evaluate("(void)UIGraphicsEndImageContext()");
+				context.evaluate("(void)[(UIColor *)[UIColor colorWithRed:0.176 green:0.541 blue:1.0 alpha:1.0] setStroke]");
+				context.evaluate("(void)[(UIBezierPath *)" + value.getPointer() + " stroke]");
+
+				context.evaluate(image.getName() + " = (UIImage *)UIGraphicsGetImageFromCurrentImageContext()");
+				context.evaluate("(void)UIGraphicsEndImageContext()");
 
 				image.refresh();
-				data = value.evaluate("(NSData *)UIImagePNGRepresentation((UIImage *)" + image.getPointer() + ")");
+				data = context.evaluate("(NSData *)UIImagePNGRepresentation((UIImage *)" + image.getPointer() + ")");
 
 				if(!data.isValid() || !data.isPointer())
 					data = null;

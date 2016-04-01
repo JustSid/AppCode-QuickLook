@@ -8,5 +8,5 @@ public interface QuickLookValueRendererFactory
 	ExtensionPointName<QuickLookValueRendererFactory> EP_NAME = ExtensionPointName.create("com.widerwille.quicklook.quickLookValueRendererFactory");
 
 	@Nullable
-	QuickLookValueRenderer createRenderer(QuickLookValue value) throws Exception;
+	QuickLookValueRenderer createRenderer(QuickLookValue value, QuickLookEvaluationContext context) throws Exception;
 }

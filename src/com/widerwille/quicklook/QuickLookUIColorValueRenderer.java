@@ -19,10 +19,12 @@ public class QuickLookUIColorValueRenderer extends QuickLookValueRenderer
 
 		try
 		{
-			QuickLookValue red = type.createVariable("CGFloat", "red");
-			QuickLookValue green = type.createVariable("CGFloat", "green");
-			QuickLookValue blue = type.createVariable("CGFloat", "blue");
-			QuickLookValue alpha = type.createVariable("CGFloat", "alpha");
+			QuickLookEvaluationContext context = type.getContext();
+
+			QuickLookValue red = context.createVariable("CGFloat", "red");
+			QuickLookValue green = context.createVariable("CGFloat", "green");
+			QuickLookValue blue = context.createVariable("CGFloat", "blue");
+			QuickLookValue alpha = context.createVariable("CGFloat", "alpha");
 
 			QuickLookValue result = type.sendMessage("getRed:&" + red + " green:&" + green + " blue:&" + blue + "  alpha:&" + alpha);
 			if(result.getValue().isTrue())
