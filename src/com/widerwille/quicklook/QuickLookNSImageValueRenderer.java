@@ -17,12 +17,31 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 	@Nullable
 	public String getDisplayValue()
 	{
-		BufferedImage image = getImageContent();
+		try
+		{
 
-		if(image == null)
-			return "<Unknown image>";
+			QuickLookValue value = getQuickLookValue();
+			QuickLookEvaluationContext context = value.getContext();
 
-		return "{" + image.getWidth() + ", " + image.getHeight() + "}";
+			QuickLookValue cgImage = context.createVariable("CGImageRef", "cgImage");
+
+			context.evaluate(cgImage.getName() + " = (CGImageRef)[(NSImage *)" + value.getPointer() + " CGImageForProposedRect:NULL context:nil hints:nil]");
+
+			cgImage.refresh();
+
+
+			QuickLookValue width = context.createVariable("CGFloat", "width");
+			QuickLookValue height = context.createVariable("CGFloat", "height");
+
+			context.evaluate(width.getName() + " = CGImageGetWidth(" + cgImage.getName() + ")");
+			context.evaluate(height.getName() + " = CGImageGetHeight(" + cgImage.getName() + ")");
+
+			return "{" + width.getFloatValue() + ", " + height.getFloatValue() + "}";
+		}
+		catch(Exception e)
+		{
+			return "<unknown image>";
+		}
 	}
 
 	@Override
