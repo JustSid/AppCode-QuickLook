@@ -31,6 +31,9 @@
 	__unused UIImage *image2 = [UIImage imageNamed:@"rock.png"];
 	__unused UIImage *image3 = [UIImage imageNamed:@"flowermap.png"];
 
+	__unused NSURL *url = [NSURL URLWithString:@"http://google.com"];
+	__unused CLLocation *location = [[CLLocation alloc] initWithLatitude:37.331688 longitude:-122.030789];
+
 	__unused UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(0, 0, 100, 100) cornerRadius:16];
 
 	return YES;

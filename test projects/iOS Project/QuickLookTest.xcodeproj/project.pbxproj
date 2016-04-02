@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9398F5F240D06052D913F1F6 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9398F62A66FFA86B81E9B159 /* CoreLocation.framework */; };
 		E9A971BC1C3C94DB00EC1A5E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A971B01C3C94DB00EC1A5E /* AppDelegate.m */; };
 		E9A971BD1C3C94DB00EC1A5E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A971B21C3C94DB00EC1A5E /* ViewController.m */; };
 		E9A971BE1C3C94DB00EC1A5E /* flowermap.png in Resources */ = {isa = PBXBuildFile; fileRef = E9A971B41C3C94DB00EC1A5E /* flowermap.png */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9398F62A66FFA86B81E9B159 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		9398F7D4A3970C69906D3CAF /* QuickLookTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuickLookTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9A971AF1C3C94DB00EC1A5E /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		E9A971B01C3C94DB00EC1A5E /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -37,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9398F5F240D06052D913F1F6 /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -51,6 +54,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		9398F670BB816292CD724ED5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9398F62A66FFA86B81E9B159 /* CoreLocation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9398FD683FB9EE43EA740141 = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +69,7 @@
 				E9A971B31C3C94DB00EC1A5E /* Resources */,
 				E9A971B91C3C94DB00EC1A5E /* Supporting files */,
 				9398F4DDE2F309FCBCA2C13D /* Products */,
+				9398F670BB816292CD724ED5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};

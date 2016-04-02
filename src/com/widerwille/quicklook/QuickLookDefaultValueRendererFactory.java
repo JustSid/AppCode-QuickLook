@@ -49,6 +49,10 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 		if(renderer != null)
 			return renderer;
 
+		renderer = QuickLookCLLocationValueRenderer.createRendererIfPossible(value);
+		if(renderer != null)
+			return renderer;
+
 		return null;
 	}
 }
