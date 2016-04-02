@@ -53,12 +53,7 @@ public class QuickLookUIBezierPathValueRenderer extends QuickLookValueRenderer
 	protected QuickLookUIBezierPathValueRenderer(QuickLookValue type)
 	{
 		super(type);
-	}
-
-	@Override
-	public boolean hasImageContent()
-	{
-		return true;
+		setEvaluator(new BufferedImageEvaluator());
 	}
 
 	@Override

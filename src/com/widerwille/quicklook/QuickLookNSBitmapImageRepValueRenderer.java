@@ -5,8 +5,6 @@ import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.image.BufferedImage;
-
 public class QuickLookNSBitmapImageRepValueRenderer extends QuickLookValueRenderer
 {
 	private static final Key<Boolean> IS_NSBITMAPIMAGEREP = Key.create("IS_NSBITMAPIMAGEREP");
@@ -56,24 +54,30 @@ public class QuickLookNSBitmapImageRepValueRenderer extends QuickLookValueRender
 	protected QuickLookNSBitmapImageRepValueRenderer(QuickLookValue type)
 	{
 		super(type);
+		setEvaluator(new BufferedImageEvaluator());
 	}
 
 	@Override
 	@Nullable
 	public String getDisplayValue()
 	{
-		BufferedImage image = getImageContent();
+		try
+		{
+			QuickLookValue value = getQuickLookValue();
+			QuickLookEvaluationContext context = value.getContext();
 
-		if(image == null)
-			return "<Unknown image>";
+			QuickLookValue width = context.createVariable("CGFloat", "width");
+			QuickLookValue height = context.createVariable("CGFloat", "height");
 
-		return "{" + image.getWidth() + ", " + image.getHeight() + "}";
-	}
+			context.evaluate(width.getName() + " = [((NSBitmapImageRep *)" + value.getPointer() + ") size].width");
+			context.evaluate(height.getName() + " = [((NSBitmapImageRep *)" + value.getPointer() + ") size].height");
 
-	@Override
-	public boolean hasImageContent()
-	{
-		return true;
+			return "{" + width.getFloatValue() + ", " + height.getFloatValue() + "}";
+		}
+		catch(Exception e)
+		{
+			return "<unknown image>";
+		}
 	}
 
 	@Override

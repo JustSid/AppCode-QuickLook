@@ -11,20 +11,17 @@ import com.intellij.xdebugger.frame.XFullValueEvaluator;
 import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 import com.jetbrains.cidr.execution.debugger.CidrDebugProcess;
 import com.jetbrains.cidr.execution.debugger.backend.DebuggerDriver;
-import org.intellij.images.editor.impl.ImageEditorManagerImpl;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
-public class QuickLookFullValueEvaluator extends XFullValueEvaluator
+public class QuickLookFullValueEvaluator<T> extends XFullValueEvaluator
 {
 	private CidrDebugProcess process;
-	private Evaluator evaluator;
+	private QuickLookValueRenderer.Evaluator<T> evaluator;
 
-	public QuickLookFullValueEvaluator(CidrDebugProcess process, Evaluator evaluator)
+	public QuickLookFullValueEvaluator(CidrDebugProcess process, QuickLookValueRenderer.Evaluator<T> evaluator)
 	{
 		super("QuickLook");
 
@@ -40,7 +37,7 @@ public class QuickLookFullValueEvaluator extends XFullValueEvaluator
 
 			public void run(@NotNull DebuggerDriver driver) throws ExecutionException
 			{
-				BufferedImage data = evaluator.evaluate();
+				T data = evaluator.evaluate();
 
 				DebuggerUIUtil.invokeLater(new Runnable()
 				{
@@ -53,7 +50,7 @@ public class QuickLookFullValueEvaluator extends XFullValueEvaluator
 						callback.evaluated("");
 
 
-						final JComponent component = createIconViewer(data);
+						final JComponent component = evaluator.createComponent(data);
 						Project project = process.getProject();
 
 						JFrame frame = WindowManager.getInstance().getFrame(project);
@@ -73,18 +70,5 @@ public class QuickLookFullValueEvaluator extends XFullValueEvaluator
 			}
 
 		});
-	}
-
-
-	static private JComponent createIconViewer(@Nullable BufferedImage image) {
-		if(image == null)
-			return new JLabel("No data", SwingConstants.CENTER);
-
-		return ImageEditorManagerImpl.createImageEditorUI(image);
-	}
-
-	public interface Evaluator
-	{
-		BufferedImage evaluate();
 	}
 }

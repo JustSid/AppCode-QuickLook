@@ -8,6 +8,7 @@ import com.jetbrains.cidr.execution.debugger.backend.DebuggerDriver;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import com.jetbrains.cidr.execution.debugger.evaluation.XValueNodeExpirable;
 import com.jetbrains.cidr.execution.debugger.evaluation.renderers.ValueRenderer;
+import org.intellij.images.editor.impl.ImageEditorManagerImpl;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,12 +25,61 @@ public class QuickLookValueRenderer extends ValueRenderer
 	private int dataFailCount = 0;
 	private BufferedImage image;
 	private QuickLookImageIcon imageIcon;
+	private Evaluator evaluator;
 
-	protected QuickLookValueRenderer(QuickLookValue value)
+	public interface Evaluator<T>
+	{
+		T evaluate();
+		JComponent createComponent(T data);
+	}
+
+	public class BufferedImageEvaluator implements Evaluator<BufferedImage>
+	{
+		@Override
+		public BufferedImage evaluate()
+		{
+			if(image == null)
+			{
+				try
+				{
+					File file = getDataFile("png");
+
+					image = ImageIO.read(file);
+					if(image != null)
+						imageIcon = new QuickLookImageIcon(image, 16, 16);
+				}
+				catch(Exception e)
+				{
+					image = null;
+					imageIcon = null;
+				}
+			}
+
+			return image;
+		}
+
+		@Override
+		public JComponent createComponent(BufferedImage data)
+		{
+			if(data == null)
+				return new JLabel("No data", SwingConstants.CENTER);
+
+			return ImageEditorManagerImpl.createImageEditorUI(data);
+		}
+	}
+
+
+
+	protected QuickLookValueRenderer(@NotNull QuickLookValue value)
 	{
 		super(value.getPhysicalValue());
 
 		this.value = value;
+	}
+
+	public void setEvaluator(Evaluator evaluator)
+	{
+		this.evaluator = evaluator;
 	}
 
 	public void close()
@@ -53,15 +103,15 @@ public class QuickLookValueRenderer extends ValueRenderer
 	}
 
 	@Nullable
-	public String getName()
-	{
-		return value.getValue().getName();
-	}
-
-	@Nullable
 	public String getDisplayValue()
 	{
 		return value.getDescription();
+	}
+
+	@NotNull
+	public QuickLookValue getQuickLookValue()
+	{
+		return value;
 	}
 
 
@@ -69,7 +119,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 	@NotNull
 	public String doComputeValue(@NotNull EvaluationContext context) throws ExecutionException, DBUserException
 	{
-		if(hasImageContent())
+		if(evaluator != null)
 		{
 			try
 			{
@@ -95,17 +145,8 @@ public class QuickLookValueRenderer extends ValueRenderer
 
 						public void run(@NotNull DebuggerDriver driver) throws ExecutionException
 						{
-							QuickLookFullValueEvaluator evaluator = new QuickLookFullValueEvaluator(process, new QuickLookFullValueEvaluator.Evaluator()
-							{
-								@Override
-								public BufferedImage evaluate()
-								{
-									return getImageContent();
-								}
-
-							});
-
-							node.setFullValueEvaluator(evaluator);
+							QuickLookFullValueEvaluator fullValueEvaluator = new QuickLookFullValueEvaluator<>(process, evaluator);
+							node.setFullValueEvaluator(fullValueEvaluator);
 						}
 
 					});
@@ -133,41 +174,6 @@ public class QuickLookValueRenderer extends ValueRenderer
 		return icon;
 	}
 
-
-	public QuickLookValue getQuickLookValue()
-	{
-		return value;
-	}
-
-
-	public boolean hasImageContent()
-	{
-		return false;
-	}
-	public BufferedImage getImageContent()
-	{
-		synchronized(this)
-		{
-			if(image == null)
-			{
-				try
-				{
-					File file = getDataFile("png");
-
-					image = ImageIO.read(file);
-					if(image != null)
-						imageIcon = new QuickLookImageIcon(image, 16, 16);
-				}
-				catch(Exception e)
-				{
-					image = null;
-					imageIcon = null;
-				}
-			}
-		}
-
-		return image;
-	}
 
 	protected QuickLookValue getDataValue()
 	{

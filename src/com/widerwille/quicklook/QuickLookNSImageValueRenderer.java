@@ -54,6 +54,7 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 	protected QuickLookNSImageValueRenderer(QuickLookValue type)
 	{
 		super(type);
+		setEvaluator(new BufferedImageEvaluator());
 	}
 
 	@Override
@@ -85,12 +86,6 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 		{
 			return "<unknown image>";
 		}
-	}
-
-	@Override
-	public boolean hasImageContent()
-	{
-		return true;
 	}
 
 	@Override

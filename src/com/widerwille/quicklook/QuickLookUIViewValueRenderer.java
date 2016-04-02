@@ -55,12 +55,7 @@ public class QuickLookUIViewValueRenderer extends QuickLookValueRenderer
 	protected QuickLookUIViewValueRenderer(QuickLookValue type)
 	{
 		super(type);
-	}
-
-	@Override
-	public boolean hasImageContent()
-	{
-		return true;
+		setEvaluator(new BufferedImageEvaluator());
 	}
 
 	@Override
