@@ -1,6 +1,8 @@
 package com.widerwille.quicklook;
 
-import org.antlr.v4.runtime.misc.Nullable;
+import com.widerwille.quicklook.renderer.*;
+
+import org.jetbrains.annotations.Nullable;
 
 public class QuickLookDefaultValueRendererFactory implements QuickLookValueRendererFactory
 {

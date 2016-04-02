@@ -52,7 +52,7 @@ public class QuickLookValue
 	{
 		return value.getName();
 	}
-	QuickLookEvaluationContext getContext()
+	public QuickLookEvaluationContext getContext()
 	{
 		return context;
 	}
@@ -101,6 +101,14 @@ public class QuickLookValue
 	public QuickLookValue sendMessage(String message, String returnType) throws ExecutionException, DBCannotEvaluateException
 	{
 		return context.evaluate("(" + returnType + ")[(" + value.getBestType() + ")(" + getPointer() + ") " + message + "]");
+	}
+
+	public QuickLookValue sendMessage(String message, String returnType, String name) throws ExecutionException, DBCannotEvaluateException
+	{
+		QuickLookValue temp = context.createVariable(returnType, name);
+		context.evaluate(temp.getName() + " = (" + returnType + ")[(" + value.getBestType() + ")(" + getPointer() + ") " + message + "]");
+
+		return temp;
 	}
 
 

@@ -1,4 +1,4 @@
-package com.widerwille.quicklook;
+package com.widerwille.quicklook.helper;
 
 import javax.swing.*;
 import java.awt.*;

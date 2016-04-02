@@ -1,4 +1,8 @@
-package com.widerwille.quicklook;
+package com.widerwille.quicklook.renderer;
+
+import com.widerwille.quicklook.QuickLookValue;
+import com.widerwille.quicklook.QuickLookValueRenderer;
+import com.widerwille.quicklook.QuickLookEvaluationContext;
 
 import com.intellij.openapi.util.Key;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;

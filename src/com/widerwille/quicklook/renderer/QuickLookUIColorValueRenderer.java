@@ -1,11 +1,16 @@
-package com.widerwille.quicklook;
+package com.widerwille.quicklook.renderer;
+
+import com.widerwille.quicklook.QuickLookValue;
+import com.widerwille.quicklook.QuickLookValueRenderer;
+import com.widerwille.quicklook.QuickLookEvaluationContext;
+import com.widerwille.quicklook.helper.QuickLookColorIcon;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.openapi.util.Key;
 import com.jetbrains.cidr.execution.debugger.backend.DBCannotEvaluateException;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
-import org.antlr.v4.runtime.misc.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +25,7 @@ public class QuickLookUIColorValueRenderer extends QuickLookValueRenderer
 	private float blueValue;
 	private float alphaValue;
 
-	protected static QuickLookValueRenderer createRendererIfPossible(QuickLookValue value)
+	public static QuickLookValueRenderer createRendererIfPossible(QuickLookValue value)
 	{
 		try
 		{

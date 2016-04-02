@@ -1,14 +1,17 @@
-package com.widerwille.quicklook;
+package com.widerwille.quicklook.renderer;
+
+import com.widerwille.quicklook.QuickLookValue;
+import com.widerwille.quicklook.QuickLookValueRenderer;
+import com.widerwille.quicklook.QuickLookEvaluationContext;
 
 import com.intellij.openapi.util.Key;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import org.jetbrains.annotations.Nullable;
 
-
-public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
+public class QuickLookNSBitmapImageRepValueRenderer extends QuickLookValueRenderer
 {
-	private static final Key<Boolean> IS_UIIMAGE = Key.create("IS_UIIMAGE");
+	private static final Key<Boolean> IS_NSBITMAPIMAGEREP = Key.create("IS_NSBITMAPIMAGEREP");
 
 	private QuickLookValue data;
 
@@ -21,16 +24,16 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 
 
 			String type = physicalValue.getType();
-			Boolean isImage = context.getCachedTypeInfo(type, IS_UIIMAGE);
+			Boolean isBitmapRep = context.getCachedTypeInfo(type, IS_NSBITMAPIMAGEREP);
 
-			if(isImage == null)
+			if(isBitmapRep == null)
 			{
-				isImage = isImageType(value);
-				context.putCachedTypeInfo(type, IS_UIIMAGE, isImage);
+				isBitmapRep = isBitmapRepType(value);
+				context.putCachedTypeInfo(type, IS_NSBITMAPIMAGEREP, isBitmapRep);
 			}
 
-			if(isImage)
-				return new QuickLookUIImageValueRenderer(value);
+			if(isBitmapRep)
+				return new QuickLookNSBitmapImageRepValueRenderer(value);
 		}
 		catch(Exception e)
 		{}
@@ -38,11 +41,11 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 		return null;
 	}
 
-	private static boolean isImageType(QuickLookValue value)
+	private static boolean isBitmapRepType(QuickLookValue value)
 	{
 		try
 		{
-			return value.isKindOfClass("UIImage");
+			return value.isKindOfClass("NSBitmapImageRep");
 		}
 		catch(Exception e)
 		{
@@ -51,7 +54,8 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 	}
 
 
-	protected QuickLookUIImageValueRenderer(QuickLookValue type)
+
+	protected QuickLookNSBitmapImageRepValueRenderer(QuickLookValue type)
 	{
 		super(type);
 		setEvaluator(new BufferedImageEvaluator());
@@ -69,9 +73,9 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 			QuickLookValue width = context.createVariable("CGFloat", "width");
 			QuickLookValue height = context.createVariable("CGFloat", "height");
 
-			context.evaluate(width.getName() + " = [((UIImage *)" + value.getPointer() + ") size].width");
-			context.evaluate(height.getName() + " = [((UIImage *)" + value.getPointer() + ") size].height");
-			
+			context.evaluate(width.getName() + " = [((NSBitmapImageRep *)" + value.getPointer() + ") size].width");
+			context.evaluate(height.getName() + " = [((NSBitmapImageRep *)" + value.getPointer() + ") size].height");
+
 			return "{" + width.getFloatValue() + ", " + height.getFloatValue() + "}";
 		}
 		catch(Exception e)
@@ -79,7 +83,6 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 			return "<unknown image>";
 		}
 	}
-
 
 	@Override
 	@Nullable
@@ -92,7 +95,7 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 				QuickLookValue value = getQuickLookValue();
 				QuickLookEvaluationContext context = value.getContext();
 
-				data = context.evaluate("(NSData *)UIImagePNGRepresentation((UIImage *)" + value.getPointer() + ")");
+				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + value.getPointer() + " representationUsingType:4 properties:nil]");
 
 				if(!data.isValid() || !data.isPointer())
 					data = null;

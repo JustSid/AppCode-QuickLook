@@ -32,7 +32,7 @@ public class QuickLookEvaluationContext
 
 		return null;
 	}
-	EvaluationContext getUnderlyingContext()
+	public EvaluationContext getUnderlyingContext()
 	{
 		return underlyingContext;
 	}

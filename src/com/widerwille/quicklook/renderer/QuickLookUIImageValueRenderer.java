@@ -1,13 +1,18 @@
-package com.widerwille.quicklook;
+package com.widerwille.quicklook.renderer;
+
+import com.widerwille.quicklook.QuickLookValue;
+import com.widerwille.quicklook.QuickLookValueRenderer;
+import com.widerwille.quicklook.QuickLookEvaluationContext;
 
 import com.intellij.openapi.util.Key;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import org.jetbrains.annotations.Nullable;
 
-public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
+
+public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 {
-	private static final Key<Boolean> IS_NSIMAGE = Key.create("IS_NSIMAGE");
+	private static final Key<Boolean> IS_UIIMAGE = Key.create("IS_UIIMAGE");
 
 	private QuickLookValue data;
 
@@ -20,16 +25,16 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 
 
 			String type = physicalValue.getType();
-			Boolean isImage = context.getCachedTypeInfo(type, IS_NSIMAGE);
+			Boolean isImage = context.getCachedTypeInfo(type, IS_UIIMAGE);
 
 			if(isImage == null)
 			{
 				isImage = isImageType(value);
-				context.putCachedTypeInfo(type, IS_NSIMAGE, isImage);
+				context.putCachedTypeInfo(type, IS_UIIMAGE, isImage);
 			}
 
 			if(isImage)
-				return new QuickLookNSImageValueRenderer(value);
+				return new QuickLookUIImageValueRenderer(value);
 		}
 		catch(Exception e)
 		{}
@@ -41,7 +46,7 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 	{
 		try
 		{
-			return value.isKindOfClass("NSImage");
+			return value.isKindOfClass("UIImage");
 		}
 		catch(Exception e)
 		{
@@ -50,8 +55,7 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 	}
 
 
-
-	protected QuickLookNSImageValueRenderer(QuickLookValue type)
+	protected QuickLookUIImageValueRenderer(QuickLookValue type)
 	{
 		super(type);
 		setEvaluator(new BufferedImageEvaluator());
@@ -63,23 +67,15 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 	{
 		try
 		{
-
 			QuickLookValue value = getQuickLookValue();
 			QuickLookEvaluationContext context = value.getContext();
-
-			QuickLookValue cgImage = context.createVariable("CGImageRef", "cgImage");
-
-			context.evaluate(cgImage.getName() + " = (CGImageRef)[(NSImage *)" + value.getPointer() + " CGImageForProposedRect:NULL context:nil hints:nil]");
-
-			cgImage.refresh();
-
 
 			QuickLookValue width = context.createVariable("CGFloat", "width");
 			QuickLookValue height = context.createVariable("CGFloat", "height");
 
-			context.evaluate(width.getName() + " = CGImageGetWidth(" + cgImage.getName() + ")");
-			context.evaluate(height.getName() + " = CGImageGetHeight(" + cgImage.getName() + ")");
-
+			context.evaluate(width.getName() + " = [((UIImage *)" + value.getPointer() + ") size].width");
+			context.evaluate(height.getName() + " = [((UIImage *)" + value.getPointer() + ") size].height");
+			
 			return "{" + width.getFloatValue() + ", " + height.getFloatValue() + "}";
 		}
 		catch(Exception e)
@@ -87,6 +83,7 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 			return "<unknown image>";
 		}
 	}
+
 
 	@Override
 	@Nullable
@@ -99,17 +96,7 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 				QuickLookValue value = getQuickLookValue();
 				QuickLookEvaluationContext context = value.getContext();
 
-				QuickLookValue cgImage = context.createVariable("CGImageRef", "cgImage");
-				QuickLookValue bitmapRef = context.createVariable("NSBitmapImageRep *", "bitmapRef");
-
-				context.evaluate(cgImage.getName() + " = (CGImageRef)[(NSImage *)" + value.getPointer() + " CGImageForProposedRect:NULL context:nil hints:nil]");
-				context.evaluate(bitmapRef.getName() + " = (NSBitmapImageRep *)[[NSBitmapImageRep alloc] initWithCGImage:" + cgImage.getName() + "]");
-				context.evaluate("[(NSBitmapImageRep *)" + bitmapRef.getName() + " setSize:(CGSize)[(NSImage *)" + value.getPointer() + " size]]");
-
-				cgImage.refresh();
-				bitmapRef.refresh();
-
-				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getName() + " representationUsingType:4 properties:nil]");
+				data = context.evaluate("(NSData *)UIImagePNGRepresentation((UIImage *)" + value.getPointer() + ")");
 
 				if(!data.isValid() || !data.isPointer())
 					data = null;

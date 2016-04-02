@@ -1,4 +1,4 @@
-package com.widerwille.quicklook;
+package com.widerwille.quicklook.helper;
 
 import com.intellij.util.ui.UIUtil;
 
