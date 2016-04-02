@@ -77,7 +77,7 @@ public class QuickLookCLLocationValueRenderer extends QuickLookValueRenderer
 				context.evaluate(latitude.getName() + " = (CLLocationDegrees)([((CLLocation *)" + value.getPointer() + ") coordinate].latitude)");
 				context.evaluate(longitude.getName() + " = (CLLocationDegrees)([((CLLocation *)" + value.getPointer() + ") coordinate].longitude)");
 
-				return new URL("https://www.google.com/maps/preview/@" + latitude.getFloatValue() + "," + longitude.getFloatValue() + ",18z");
+				return new URL("http://maps.google.com/maps?q=" + latitude.getFloatValue() + "," + longitude.getFloatValue() + "&z=18");
 			}
 			catch(Exception e)
 			{
