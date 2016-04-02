@@ -9,7 +9,7 @@ The plugin displays a `QuickLook` link in the debugger, clicking it will bring u
 Right now this plugin only supports Objective-C. Furthermore, not all types supported by Xcode are supported in this plugin, however, these types are supported:
 
 * UIImage
-* NSImage````
+* NSImage
 * NSBitmapImageRep
 * UIImageView
 * NSImageView
@@ -18,6 +18,7 @@ Right now this plugin only supports Objective-C. Furthermore, not all types supp
 * UIBezierPath
 * UIView classes
 * NSView classes
+* NSURL
 * Custom classes that implement `debugQuickLookObject` and which return one of the above objects
 
 # License
