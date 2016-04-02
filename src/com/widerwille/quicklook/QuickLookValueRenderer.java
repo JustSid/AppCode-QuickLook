@@ -21,10 +21,8 @@ import java.lang.reflect.Field;
 public class QuickLookValueRenderer extends ValueRenderer
 {
 	private QuickLookValue value;
-	private File dataFile = null;
 	private int dataFailCount = 0;
 	private BufferedImage image;
-	private QuickLookImageIcon imageIcon;
 	private Evaluator evaluator;
 
 	public interface Evaluator<T>
@@ -40,18 +38,20 @@ public class QuickLookValueRenderer extends ValueRenderer
 		{
 			if(image == null)
 			{
+				File file = null;
+
 				try
 				{
-					File file = getDataFile("png");
-
+					file = getDataFile("png");
 					image = ImageIO.read(file);
-					if(image != null)
-						imageIcon = new QuickLookImageIcon(image, 16, 16);
+					file.delete();
 				}
 				catch(Exception e)
 				{
+					if(file != null)
+						file.delete();
+
 					image = null;
-					imageIcon = null;
 				}
 			}
 
@@ -62,7 +62,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 		public JComponent createComponent(BufferedImage data)
 		{
 			if(data == null)
-				return new JLabel("No data", SwingConstants.CENTER);
+				return null;
 
 			return ImageEditorManagerImpl.createImageEditorUI(data);
 		}
@@ -80,14 +80,6 @@ public class QuickLookValueRenderer extends ValueRenderer
 	public void setEvaluator(Evaluator evaluator)
 	{
 		this.evaluator = evaluator;
-	}
-
-	public void close()
-	{
-		if(dataFile != null)
-			dataFile.delete();
-
-		dataFile = null;
 	}
 
 	@Nullable
@@ -181,55 +173,55 @@ public class QuickLookValueRenderer extends ValueRenderer
 	}
 	protected File getDataFile(String extension)
 	{
-		if(dataFile == null)
+		if(dataFailCount >= 3)
+			return null;
+
+		File file = null;
+
+		try
 		{
-			if(dataFailCount >= 3)
-				return null;
-
-			try
+			QuickLookValue dataValue = getDataValue();
+			if(dataValue == null || !dataValue.isValid() || !dataValue.isKindOfClass("NSData"))
 			{
-				QuickLookValue dataValue = getDataValue();
-				if(dataValue == null || !dataValue.isValid() || !dataValue.isKindOfClass("NSData"))
-				{
-					dataFailCount ++;
-					return null;
-				}
-
-				dataFile = File.createTempFile("lldbOutput", "." + extension);
-
-				QuickLookValue bytesPointer = dataValue.sendMessage("bytes");
-				QuickLookValue length = dataValue.sendMessage("length");
-
-				Long pointer = Long.parseLong(bytesPointer.getPointer().substring(2), 16);
-				String eval = "memory read -o " + dataFile.getPath() + " -b --force " + bytesPointer.getPointer() + " 0x" + Long.toHexString(pointer + length.getIntValue());
-
-				dataValue.getContext().executeCommand(eval);
-
-				// Give the command some time to complete
-				int iteration = 0;
-				while(dataFile.length() < length.getIntValue() && iteration < 10)
-				{
-					Thread.sleep(100);
-					iteration ++;
-				}
-
-				// Aaaaand give up...
-				if(iteration >= 10 && dataFile.length() < length.getIntValue())
-				{
-					dataFile.delete();
-					dataFile = null;
-				}
-			}
-			catch(Exception e)
-			{
-				if(dataFile != null)
-					dataFile.delete();
-
-				dataFile = null;
 				dataFailCount ++;
+				return null;
 			}
+
+			file = File.createTempFile("lldbOutput", "." + extension);
+
+			QuickLookValue bytesPointer = dataValue.sendMessage("bytes");
+			QuickLookValue length = dataValue.sendMessage("length");
+
+			Long pointer = Long.parseLong(bytesPointer.getPointer().substring(2), 16);
+			String eval = "memory read -o " + file.getPath() + " -b --force " + bytesPointer.getPointer() + " 0x" + Long.toHexString(pointer + length.getIntValue());
+
+			dataValue.getContext().executeCommand(eval);
+
+			// Give the command some time to complete
+			int iteration = 0;
+			while(file.length() < length.getIntValue() && iteration < 10)
+			{
+				Thread.sleep(100);
+				iteration ++;
+			}
+
+			// Aaaaand give up...
+			if(iteration >= 10 && file.length() < length.getIntValue())
+			{
+				file.delete();
+				return null;
+			}
+
+			return file;
+		}
+		catch(Exception e)
+		{
+			if(file != null)
+				file.delete();
+
+			dataFailCount ++;
 		}
 
-		return dataFile;
+		return null;
 	}
 }

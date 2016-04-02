@@ -39,32 +39,32 @@ public class QuickLookFullValueEvaluator<T> extends XFullValueEvaluator
 			{
 				T data = evaluator.evaluate();
 
-				DebuggerUIUtil.invokeLater(new Runnable()
-				{
-					@Override
-					public void run()
-					{
-						if(callback.isObsolete())
-							return;
+				DebuggerUIUtil.invokeLater(() -> {
 
-						callback.evaluated("");
+					if(callback.isObsolete())
+						return;
+
+					callback.evaluated("");
 
 
-						final JComponent component = evaluator.createComponent(data);
-						Project project = process.getProject();
+					JComponent component = evaluator.createComponent(data);
+					if(component == null)
+						component = new JLabel("No data", SwingConstants.CENTER);
 
-						JFrame frame = WindowManager.getInstance().getFrame(project);
-						Dimension frameSize = frame.getSize();
-						Dimension size = new Dimension(frameSize.width / 2, frameSize.height / 2);
+					Project project = process.getProject();
 
-						JBPopup popup = DebuggerUIUtil.createValuePopup(project, component, null);
-						popup.setSize(size);
+					JFrame frame = WindowManager.getInstance().getFrame(project);
+					Dimension frameSize = frame.getSize();
+					Dimension size = new Dimension((int)(frameSize.width / 1.5), (int)(frameSize.height / 1.5));
 
-						if(component instanceof Disposable)
-							Disposer.register(popup, (Disposable)component);
+					JBPopup popup = DebuggerUIUtil.createValuePopup(project, component, null);
+					popup.setSize(size);
 
-						popup.show(new RelativePoint(frame, new Point(size.width / 2, size.height / 2)));
-					}
+					if(component instanceof Disposable)
+						Disposer.register(popup, (Disposable) component);
+
+					RelativePoint point = new RelativePoint(frame, new Point((frameSize.width - size.width) / 2, (frameSize.height - size.height) / 2));
+					popup.show(point);
 
 				});
 			}
