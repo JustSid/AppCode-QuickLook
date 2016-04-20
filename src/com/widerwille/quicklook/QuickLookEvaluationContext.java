@@ -11,11 +11,47 @@ import java.lang.reflect.Field;
 
 public class QuickLookEvaluationContext
 {
+	public enum Platform
+	{
+		Unknown,
+		iPhone,
+		Mac
+	}
+
 	private EvaluationContext underlyingContext;
+	private static boolean evaluatedPlatform = false;
+	private static Platform platform = Platform.Unknown;
+
 
 	public QuickLookEvaluationContext(@NotNull EvaluationContext context)
 	{
 		underlyingContext = context;
+
+		if(!evaluatedPlatform)
+		{
+			try
+			{
+				QuickLookValue UIDeviceValue = evaluate("(Class)NSClassFromString(@\"UIDevice\")");
+				QuickLookValue NSImageValue = evaluate("(Class)NSClassFromString(@\"NSImage\")");
+
+				if(!UIDeviceValue.isNilPointer())
+				{
+					platform = Platform.iPhone;
+				}
+				else if(!NSImageValue.isNilPointer())
+				{
+					platform = Platform.Mac;
+				}
+				else
+				{
+					platform = Platform.Unknown;
+				}
+			}
+			catch(Exception e)
+			{
+				platform = Platform.Unknown;
+			}
+		}
 	}
 
 	public DebuggerDriver getDebuggerDriver()
@@ -58,5 +94,10 @@ public class QuickLookEvaluationContext
 	public void executeCommand(String command) throws ExecutionException
 	{
 		getDebuggerDriver().executeConsoleCommand(command);
+	}
+
+	public Platform getPlatform()
+	{
+		return platform;
 	}
 }
