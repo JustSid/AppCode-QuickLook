@@ -19,6 +19,7 @@ Right now this plugin only supports Objective-C. Furthermore, not all types supp
 * UIView classes
 * NSView classes
 * NSURL
+* CLLocation
 * Custom classes that implement `debugQuickLookObject` and which return one of the above objects
 
 # License
