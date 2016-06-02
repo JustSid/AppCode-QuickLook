@@ -9,7 +9,7 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 	public QuickLookDefaultValueRendererFactory()
 	{}
 
-	public QuickLookValueRenderer createDefaultPlatformRenderer(QuickLookValue value, QuickLookEvaluationContext context) throws Exception
+	private QuickLookValueRenderer createDefaultPlatformRenderer(QuickLookValue value, QuickLookEvaluationContext context) throws Exception
 	{
 		QuickLookValueRenderer renderer;
 
@@ -47,6 +47,10 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 					return renderer;
 
 				renderer = QuickLookUIBezierPathValueRenderer.createRendererIfPossible(value);
+				if(renderer != null)
+					return renderer;
+
+				renderer = QuickLookCALayerValueRenderer.createRendererIfPossible(value);
 				if(renderer != null)
 					return renderer;
 
