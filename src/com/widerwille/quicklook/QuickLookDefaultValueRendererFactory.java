@@ -9,21 +9,35 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 	public QuickLookDefaultValueRendererFactory()
 	{}
 
+	public QuickLookValueRenderer createDefaultPlatformRenderer(QuickLookValue value, QuickLookEvaluationContext context) throws Exception
+	{
+		QuickLookValueRenderer renderer;
+
+		renderer = QuickLookUIColorValueRenderer.createRendererIfPossible(value);
+		if(renderer != null)
+			return renderer;
+
+		renderer = QuickLookNSURLValueRenderer.createRendererIfPossible(value);
+		if(renderer != null)
+			return renderer;
+
+		renderer = QuickLookCLLocationValueRenderer.createRendererIfPossible(value);
+		if(renderer != null)
+			return renderer;
+
+		return null;
+	}
+
 	@Override
 	@Nullable
 	public QuickLookValueRenderer createRenderer(QuickLookValue value, QuickLookEvaluationContext context) throws Exception
 	{
-
 		QuickLookValueRenderer renderer;
 
 		switch(context.getPlatform())
 		{
 			case iPhone:
 			{
-				renderer = QuickLookUIColorValueRenderer.createRendererIfPossible(value);
-				if(renderer != null)
-					return renderer;
-
 				renderer = QuickLookUIImageValueRenderer.createRendererIfPossible(value);
 				if(renderer != null)
 					return renderer;
@@ -36,23 +50,16 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 				if(renderer != null)
 					return renderer;
 
-				renderer = QuickLookNSURLValueRenderer.createRendererIfPossible(value);
-				if(renderer != null)
-					return renderer;
-
-				renderer = QuickLookNSBitmapImageRepValueRenderer.createRendererIfPossible(value);
-				if(renderer != null)
-					return renderer;
-				break;
+				return createDefaultPlatformRenderer(value, context);
 			}
 
 			case Mac:
 			{
-				renderer = QuickLookUIColorValueRenderer.createRendererIfPossible(value);
+				renderer = QuickLookNSImageValueRenderer.createRendererIfPossible(value);
 				if(renderer != null)
 					return renderer;
 
-				renderer = QuickLookNSImageValueRenderer.createRendererIfPossible(value);
+				renderer = QuickLookNSBitmapImageRepValueRenderer.createRendererIfPossible(value);
 				if(renderer != null)
 					return renderer;
 
@@ -60,14 +67,7 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 				if(renderer != null)
 					return renderer;
 
-				renderer = QuickLookNSURLValueRenderer.createRendererIfPossible(value);
-				if(renderer != null)
-					return renderer;
-
-				renderer = QuickLookCLLocationValueRenderer.createRendererIfPossible(value);
-				if(renderer != null)
-					return renderer;
-				break;
+				return createDefaultPlatformRenderer(value, context);
 			}
 
 			case Unknown:
