@@ -18,9 +18,16 @@ Right now this plugin only supports Objective-C. Furthermore, not all types supp
 * UIBezierPath
 * UIView classes
 * NSView classes
+* CALayer (iOS only)
 * NSURL
 * CLLocation
 * Custom classes that implement `debugQuickLookObject` and which return one of the above objects
+
+# Screenshot
+
+Words say more than 1000 words, so how about a super downsized gif?
+
+![QuickLook](./QuickLook.gif)
 
 # License
 
