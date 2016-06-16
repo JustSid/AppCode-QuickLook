@@ -1,5 +1,6 @@
 package com.widerwille.quicklook.renderer;
 
+import com.jetbrains.cidr.execution.debugger.backend.DebuggerCommandException;
 import com.widerwille.quicklook.QuickLookValue;
 import com.widerwille.quicklook.QuickLookValueRenderer;
 import com.widerwille.quicklook.QuickLookEvaluationContext;
@@ -7,7 +8,6 @@ import com.widerwille.quicklook.helper.QuickLookColorIcon;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.openapi.util.Key;
-import com.jetbrains.cidr.execution.debugger.backend.DBCannotEvaluateException;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import org.jetbrains.annotations.Nullable;
@@ -63,7 +63,7 @@ public class QuickLookUIColorValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-	private QuickLookUIColorValueRenderer(QuickLookValue type) throws DBCannotEvaluateException, ExecutionException
+	private QuickLookUIColorValueRenderer(QuickLookValue type) throws DebuggerCommandException, ExecutionException
 	{
 		super(type);
 
@@ -75,7 +75,7 @@ public class QuickLookUIColorValueRenderer extends QuickLookValueRenderer
 		QuickLookValue alpha = context.createVariable("CGFloat", "alpha");
 
 		QuickLookValue result = type.sendMessage("getRed:&" + red + " green:&" + green + " blue:&" + blue + "  alpha:&" + alpha);
-		if(result.getValue().isTrue())
+		if(result.getValueData().isTrue())
 		{
 			redValue = red.getFloatValue();
 			greenValue = green.getFloatValue();

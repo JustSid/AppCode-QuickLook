@@ -33,7 +33,7 @@ public class QuickLookFullValueEvaluator<T> extends XFullValueEvaluator
 	@Override
 	public void startEvaluation(@NotNull XFullValueEvaluationCallback callback)
 	{
-		process.postCommand(new CidrDebugProcess.DebuggerImplicitCommand() {
+		process.postCommand(new CidrDebugProcess.DebuggerCommand() {
 
 			public void run(@NotNull DebuggerDriver driver) throws ExecutionException
 			{

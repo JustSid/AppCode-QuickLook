@@ -70,7 +70,7 @@ public class QuickLookNSURLValueRenderer extends QuickLookValueRenderer
 		try
 		{
 			QuickLookValue value = getQuickLookValue();
-			String absoluteURL = value.sendMessage("absoluteString", "NSString *").sendMessage("UTF8String").getValue().getReadableValue();
+			String absoluteURL = value.sendMessage("absoluteString", "NSString *").sendMessage("UTF8String").getValueData().getPresentableValue();
 
 			return absoluteURL.replace("\"", "");
 		}
@@ -89,7 +89,7 @@ public class QuickLookNSURLValueRenderer extends QuickLookValueRenderer
 			try
 			{
 				QuickLookValue value = getQuickLookValue();
-				String absoluteURL = value.sendMessage("absoluteString", "NSString *").sendMessage("UTF8String").getValue().getReadableValue();
+				String absoluteURL = value.sendMessage("absoluteString", "NSString *").sendMessage("UTF8String").getValueData().getPresentableValue();
 
 				return new URL(absoluteURL.replace("\"", ""));
 			}

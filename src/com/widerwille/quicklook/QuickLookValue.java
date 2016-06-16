@@ -1,9 +1,10 @@
 package com.widerwille.quicklook;
 
 import com.intellij.execution.ExecutionException;
-import com.jetbrains.cidr.execution.debugger.backend.DBCannotEvaluateException;
+import com.jetbrains.cidr.execution.debugger.backend.DebuggerCommandException;
 import com.jetbrains.cidr.execution.debugger.backend.DebuggerDriver;
 import com.jetbrains.cidr.execution.debugger.backend.LLValue;
+import com.jetbrains.cidr.execution.debugger.backend.LLValueData;
 import com.jetbrains.cidr.execution.debugger.evaluation.CidrPhysicalValue;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import org.jetbrains.annotations.NotNull;
@@ -13,12 +14,14 @@ public class QuickLookValue
 {
 	private QuickLookEvaluationContext context;
 	private LLValue value;
+	private LLValueData valueData;
 	private CidrPhysicalValue physicalValue;
 
-	public QuickLookValue(@Nullable CidrPhysicalValue physicalValue, @NotNull LLValue lldbValue, @NotNull QuickLookEvaluationContext context)
+	public QuickLookValue(@Nullable CidrPhysicalValue physicalValue, @NotNull LLValue lldbValue, @NotNull LLValueData lldbValueData, @NotNull QuickLookEvaluationContext context)
 	{
 		this.physicalValue = physicalValue;
 		this.value = lldbValue;
+		this.valueData = lldbValueData;
 		this.context = context;
 	}
 
@@ -26,6 +29,20 @@ public class QuickLookValue
 	public LLValue getValue()
 	{
 		return value;
+	}
+	public LLValueData getValueData()
+	{
+		try
+		{
+			if(valueData == null)
+				valueData = context.getUnderlyingContext().getData(value);
+		}
+		catch(Exception e)
+		{
+			valueData = null;
+		}
+
+		return valueData;
 	}
 	public CidrPhysicalValue getPhysicalValue()
 	{
@@ -35,7 +52,7 @@ public class QuickLookValue
 	{
 		try
 		{
-			return sendMessage("description").sendMessage("UTF8String").getValue().getReadableValue();
+			return context.getUnderlyingContext().getData(sendMessage("description").sendMessage("UTF8String").getValue()).getPresentableValue();
 		}
 		catch(Exception e)
 		{}
@@ -44,9 +61,9 @@ public class QuickLookValue
 	}
 
 
-	public String getPointer() throws DBCannotEvaluateException
+	public String getPointer() throws DebuggerCommandException
 	{
-		return value.getPointer();
+		return getValueData().getPointer();
 	}
 	public String getName()
 	{
@@ -64,11 +81,11 @@ public class QuickLookValue
 	}
 	public boolean isPointer()
 	{
-		return value.isPointer();
+		return getValueData().isPointer();
 	}
 	public boolean isNilPointer()
 	{
-		return value.isNilPointer();
+		return getValueData().isNullPointer();
 	}
 
 
@@ -79,34 +96,42 @@ public class QuickLookValue
 	}
 
 
-	public boolean isKindOfClass(String className) throws ExecutionException, DBCannotEvaluateException
-	{
-		return context.getUnderlyingContext().evaluate("(unsigned char)((Class)objc_getClass(\"" + className + "\")?" + EvaluationContext.cast("[" + EvaluationContext.cast(value.getPointer(), "id") + " " + "isKindOfClass:(Class)objc_lookUpClass(\"" + className + "\")" + "]", "unsigned char") + ":0)", DebuggerDriver.StandardDebuggerLanguage.OBJC_PLUS_PLUS).isTrue();
-	}
-	public boolean respondsToSelector(String selector)
+	public boolean isKindOfClass(String className)
 	{
 		try
 		{
-			return context.getUnderlyingContext().messageSend(value, "respondsToSelector:(SEL)NSSelectorFromString(@\"" + selector + "\")").isTrue();
+			LLValueData data = context.getUnderlyingContext().evaluateData("(unsigned char)((Class)objc_getClass(\"" + className + "\")?" + EvaluationContext.cast("[" + EvaluationContext.cast(getPointer(), "id") + " " + "isKindOfClass:(Class)objc_lookUpClass(\"" + className + "\")" + "]", "unsigned char") + ":0)", DebuggerDriver.StandardDebuggerLanguage.OBJC_PLUS_PLUS);
+			return data.isTrue();
 		}
 		catch(Exception e)
 		{
 			return false;
 		}
 	}
-	public QuickLookValue sendMessage(String message) throws ExecutionException, DBCannotEvaluateException
+	public boolean respondsToSelector(String selector)
 	{
-		return context.evaluate("[(" + value.getBestType() + ")(" + getPointer() + ") " + message + "]");
+		try
+		{
+			return context.getUnderlyingContext().messageSendData(value, "respondsToSelector:(SEL)NSSelectorFromString(@\"" + selector + "\")").isTrue();
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
-	public QuickLookValue sendMessage(String message, String returnType) throws ExecutionException, DBCannotEvaluateException
+	public QuickLookValue sendMessage(String message) throws ExecutionException, DebuggerCommandException
 	{
-		return context.evaluate("(" + returnType + ")[(" + value.getBestType() + ")(" + getPointer() + ") " + message + "]");
+		return context.evaluate("[(" + value.getType() + ")(" + getPointer() + ") " + message + "]");
+	}
+	public QuickLookValue sendMessage(String message, String returnType) throws ExecutionException, DebuggerCommandException
+	{
+		return context.evaluate("(" + returnType + ")[(" + value.getType() + ")(" + getPointer() + ") " + message + "]");
 	}
 
-	public QuickLookValue sendMessage(String message, String returnType, String name) throws ExecutionException, DBCannotEvaluateException
+	public QuickLookValue sendMessage(String message, String returnType, String name) throws ExecutionException, DebuggerCommandException
 	{
 		QuickLookValue temp = context.createVariable(returnType, name);
-		context.evaluate(temp.getName() + " = (" + returnType + ")[(" + value.getBestType() + ")(" + getPointer() + ") " + message + "]");
+		context.evaluate(temp.getName() + " = (" + returnType + ")[(" + value.getType() + ")(" + getPointer() + ") " + message + "]");
 
 		return temp;
 	}
@@ -121,6 +146,7 @@ public class QuickLookValue
 			{
 				LLValue temp = context.getUnderlyingContext().evaluate(expression);
 				value = temp;
+				valueData = null;
 			}
 			catch(Exception e)
 			{}
@@ -130,7 +156,7 @@ public class QuickLookValue
 	public String getStringValue()
 	{
 		refresh();
-		return value.getValue();
+		return getValueData().getValue();
 	}
 	public float getFloatValue()
 	{

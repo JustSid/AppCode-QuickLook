@@ -132,6 +132,12 @@
 			isa = PBXProject;
 			attributes = {
 				ORGANIZATIONNAME = Widerwille;
+				TargetAttributes = {
+					9398F54B500A9D3881FF9321 = {
+						DevelopmentTeam = CK43D3C6TT;
+						DevelopmentTeamName = "Sidney Just (Personal Team)";
+					};
+				};
 			};
 			buildConfigurationList = 9398FCD1B841100A03E26D61 /* Build configuration list for PBXProject "QuickLookTest" */;
 			compatibilityVersion = "Xcode 3.2";

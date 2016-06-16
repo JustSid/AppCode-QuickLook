@@ -1,9 +1,10 @@
 package com.widerwille.quicklook;
 
 import com.intellij.execution.ExecutionException;
-import com.jetbrains.cidr.execution.debugger.backend.DBCannotEvaluateException;
+import com.jetbrains.cidr.execution.debugger.backend.DebuggerCommandException;
 import com.jetbrains.cidr.execution.debugger.backend.DebuggerDriver;
 import com.jetbrains.cidr.execution.debugger.backend.LLValue;
+import com.jetbrains.cidr.execution.debugger.backend.LLValueData;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
 import org.jetbrains.annotations.NotNull;
 
@@ -75,13 +76,15 @@ public class QuickLookEvaluationContext
 
 
 
-	public QuickLookValue evaluate(String string) throws ExecutionException, DBCannotEvaluateException
+	public QuickLookValue evaluate(String string) throws ExecutionException, DebuggerCommandException
 	{
 		LLValue value = underlyingContext.evaluate(string);
-		return new QuickLookValue(null, value, this);
+		LLValueData data = underlyingContext.getData(value);
+
+		return new QuickLookValue(null, value, data, this);
 	}
 
-	public QuickLookValue createVariable(String type, String name) throws ExecutionException, DBCannotEvaluateException
+	public QuickLookValue createVariable(String type, String name) throws ExecutionException, DebuggerCommandException
 	{
 		LLValue value = underlyingContext.evaluate(type + " $" + name);
 
@@ -91,7 +94,7 @@ public class QuickLookEvaluationContext
 		return null;
 	}
 
-	public void executeCommand(String command) throws ExecutionException
+	public void executeCommand(String command) throws ExecutionException, DebuggerCommandException
 	{
 		getDebuggerDriver().executeConsoleCommand(command);
 	}

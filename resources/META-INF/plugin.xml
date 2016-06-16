@@ -27,6 +27,9 @@
 
     <change-notes><![CDATA[
     <ul><h3><b>0.9.1</b></h3>
+      <li>Fixed support for AppCode 2016.2 EAP 2</li>
+    </ul>
+    <ul><h3><b>0.9.1</b></h3>
       <li>Added support for NSURL</li>
       <li>Added support for CLLocation</li>
       <li>Added support for CALayer (iOS only)</li>
@@ -46,7 +49,7 @@
     </change-notes>
 
 
-    <idea-version since-build="145"/>
+    <idea-version since-build="162"/>
     <depends>com.intellij.modules.appcode</depends>
 
     <extensionPoints>
@@ -55,7 +58,7 @@
     
 
     <extensions defaultExtensionNs="cidr.debugger">
-        <customValueRendererFactory implementation="com.widerwille.quicklook.QuickLookCustomValueRendererFactory" />
+        <valueRendererFactory implementation="com.widerwille.quicklook.QuickLookCustomValueRendererFactory" />
     </extensions>
 
     <extensions defaultExtensionNs="com.widerwille.quicklook">
