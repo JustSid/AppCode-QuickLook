@@ -51,6 +51,7 @@
 
     <idea-version since-build="162"/>
     <depends>com.intellij.modules.appcode</depends>
+    <depends>com.intellij.platform.images</depends>
 
     <extensionPoints>
         <extensionPoint qualifiedName="com.widerwille.quicklook.quickLookValueRendererFactory" interface="com.widerwille.quicklook.QuickLookValueRendererFactory" />

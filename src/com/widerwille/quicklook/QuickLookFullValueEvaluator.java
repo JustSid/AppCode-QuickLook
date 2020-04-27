@@ -10,6 +10,7 @@ import com.intellij.ui.awt.RelativePoint;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
 import com.intellij.xdebugger.impl.ui.DebuggerUIUtil;
 import com.jetbrains.cidr.execution.debugger.CidrDebugProcess;
+import com.jetbrains.cidr.execution.debugger.backend.DebuggerCommandException;
 import com.jetbrains.cidr.execution.debugger.backend.DebuggerDriver;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,8 +36,8 @@ public class QuickLookFullValueEvaluator<T> extends XFullValueEvaluator
 	{
 		process.postCommand(new CidrDebugProcess.DebuggerCommand() {
 
-			public void run(@NotNull DebuggerDriver driver) throws ExecutionException
-			{
+			@Override
+			public Object call(@NotNull DebuggerDriver debuggerDriver) throws ExecutionException, DebuggerCommandException {
 				T data = evaluator.evaluate();
 
 				DebuggerUIUtil.invokeLater(() -> {
@@ -54,6 +55,9 @@ public class QuickLookFullValueEvaluator<T> extends XFullValueEvaluator
 					Project project = process.getProject();
 
 					JFrame frame = WindowManager.getInstance().getFrame(project);
+					if(frame == null) {
+						return;
+					}
 					Dimension frameSize = frame.getSize();
 					Dimension size = new Dimension((int)(frameSize.width / 1.5), (int)(frameSize.height / 1.5));
 
@@ -67,8 +71,9 @@ public class QuickLookFullValueEvaluator<T> extends XFullValueEvaluator
 					popup.show(point);
 
 				});
-			}
 
+				return data;
+			}
 		});
 	}
 }
