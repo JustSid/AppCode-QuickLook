@@ -1,6 +1,6 @@
 package com.widerwille.quicklook.helper;
 
-import com.intellij.util.ui.UIUtil;
+import com.intellij.util.ui.ImageUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +14,7 @@ public class QuickLookImageIcon implements Icon
 
 	QuickLookImageIcon(Image image, int width, int height)
 	{
-		BufferedImage resizedImage = UIUtil.createImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage resizedImage = ImageUtil.createImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
 		Graphics2D g = resizedImage.createGraphics();
 

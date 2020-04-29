@@ -52,7 +52,7 @@
     </change-notes>
 
 
-    <idea-version since-build="162"/>
+    <idea-version since-build="193.1784"/>
     <depends>com.intellij.modules.appcode</depends>
     <depends>com.intellij.platform.images</depends>
 
