@@ -9,8 +9,8 @@ import java.awt.image.BufferedImage;
 public class QuickLookImageIcon implements Icon
 {
 	private BufferedImage image = null;
-	private int width;
-	private int height;
+	private final int width;
+	private final int height;
 
 	QuickLookImageIcon(Image image, int width, int height)
 	{
@@ -27,7 +27,7 @@ public class QuickLookImageIcon implements Icon
 			float widthFactor = width / (float) image.getWidth(null);
 			float heightFactor = height / (float) image.getHeight(null);
 
-			float factor = (widthFactor > heightFactor) ? heightFactor : widthFactor;
+			float factor = Math.min(widthFactor, heightFactor);
 			if(factor > 1.0f)
 				factor = 1.0f;
 

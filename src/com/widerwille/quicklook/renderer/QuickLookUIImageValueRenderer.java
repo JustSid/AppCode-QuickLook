@@ -84,7 +84,6 @@ public class QuickLookUIImageValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
 	@Override
 	@Nullable
 	protected QuickLookValue getDataValue()

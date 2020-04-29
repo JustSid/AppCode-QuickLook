@@ -53,8 +53,6 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
-
 	protected QuickLookNSImageValueRenderer(QuickLookValue type)
 	{
 		super(type);

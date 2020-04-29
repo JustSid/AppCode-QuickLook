@@ -19,8 +19,8 @@ import java.awt.*;
 
 public class QuickLookFullValueEvaluator<T> extends XFullValueEvaluator
 {
-	private CidrDebugProcess process;
-	private QuickLookValueRenderer.Evaluator<T> evaluator;
+	private final CidrDebugProcess process;
+	private final QuickLookValueRenderer.Evaluator<T> evaluator;
 
 	public QuickLookFullValueEvaluator(CidrDebugProcess process, QuickLookValueRenderer.Evaluator<T> evaluator)
 	{

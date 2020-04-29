@@ -53,7 +53,6 @@ public class QuickLookUIBezierPathValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
 	protected QuickLookUIBezierPathValueRenderer(QuickLookValue type)
 	{
 		super(type);

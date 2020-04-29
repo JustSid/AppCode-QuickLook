@@ -53,13 +53,11 @@ public class QuickLookCLLocationValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
 	private QuickLookCLLocationValueRenderer(QuickLookValue value)
 	{
 		super(value);
 		setEvaluator(new LocationEvaluator());
 	}
-
 
 	public class LocationEvaluator implements Evaluator<URL>
 	{

@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class QuickLookColorIcon implements Icon
 {
-	private Color color;
+	private final Color color;
 
 	public QuickLookColorIcon(Color color)
 	{

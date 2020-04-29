@@ -3,17 +3,14 @@ package com.widerwille.quicklook;
 import com.intellij.execution.ExecutionException;
 import com.intellij.openapi.util.Pair;
 import com.intellij.xdebugger.frame.XFullValueEvaluator;
-import com.intellij.xdebugger.impl.ui.tree.nodes.XValueNodeImpl;
 import com.jetbrains.cidr.execution.debugger.CidrDebugProcess;
 import com.jetbrains.cidr.execution.debugger.CidrStackFrame;
 import com.jetbrains.cidr.execution.debugger.backend.DebuggerCommandException;
-import com.jetbrains.cidr.execution.debugger.backend.DebuggerDriver;
 import com.jetbrains.cidr.execution.debugger.evaluation.EvaluationContext;
-import com.jetbrains.cidr.execution.debugger.evaluation.XValueNodeExpirable;
 import com.jetbrains.cidr.execution.debugger.evaluation.renderers.ValueRenderer;
 import org.intellij.images.editor.impl.ImageEditorManagerImpl;
-import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -23,7 +20,7 @@ import java.lang.reflect.Field;
 
 public class QuickLookValueRenderer extends ValueRenderer
 {
-	private QuickLookValue value;
+	private final QuickLookValue value;
 	private int dataFailCount = 0;
 	private BufferedImage image;
 	private Evaluator evaluator;
@@ -176,7 +173,7 @@ public class QuickLookValueRenderer extends ValueRenderer
 			QuickLookValue bytesPointer = dataValue.sendMessage("bytes");
 			QuickLookValue length = dataValue.sendMessage("length");
 
-			Long pointer = Long.parseLong(bytesPointer.getPointer().substring(2), 16);
+			long pointer = Long.parseLong(bytesPointer.getPointer().substring(2), 16);
 			String eval = "memory read -o " + file.getPath() + " -b --force " + bytesPointer.getPointer() + " 0x" + Long.toHexString(pointer + length.getIntValue());
 
 			dataValue.getContext().executeCommand(eval);

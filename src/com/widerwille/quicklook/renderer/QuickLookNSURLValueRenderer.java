@@ -55,8 +55,6 @@ public class QuickLookNSURLValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
-
 	private QuickLookNSURLValueRenderer(QuickLookValue value)
 	{
 		super(value);
@@ -79,7 +77,6 @@ public class QuickLookNSURLValueRenderer extends QuickLookValueRenderer
 			return null;
 		}
 	}
-
 
 	public class URLEvaluator implements Evaluator<URL>
 	{
