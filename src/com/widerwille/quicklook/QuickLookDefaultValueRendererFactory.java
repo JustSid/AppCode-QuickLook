@@ -8,29 +8,16 @@ public class QuickLookDefaultValueRendererFactory implements QuickLookValueRende
 	public QuickLookDefaultValueRendererFactory()
 	{}
 
-	private QuickLookValueRenderer createDefaultPlatformRenderer(QuickLookValue value, QuickLookEvaluationContext context) throws Exception
-	{
+	private QuickLookValueRenderer createDefaultPlatformRenderer(QuickLookValue value, QuickLookEvaluationContext context) {
 		QuickLookValueRenderer renderer;
 
 		renderer = QuickLookUIColorValueRenderer.createRendererIfPossible(value);
-		if(renderer != null)
-			return renderer;
-
-		renderer = QuickLookNSURLValueRenderer.createRendererIfPossible(value);
-		if(renderer != null)
-			return renderer;
-
-		renderer = QuickLookCLLocationValueRenderer.createRendererIfPossible(value);
-		if(renderer != null)
-			return renderer;
-
-		return null;
+		return renderer;
 	}
 
 	@Override
 	@Nullable
-	public QuickLookValueRenderer createRenderer(QuickLookValue value, QuickLookEvaluationContext context) throws Exception
-	{
+	public QuickLookValueRenderer createRenderer(QuickLookValue value, QuickLookEvaluationContext context) {
 		QuickLookValueRenderer renderer;
 
 		switch(context.getPlatform())

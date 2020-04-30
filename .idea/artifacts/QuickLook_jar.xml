@@ -3,12 +3,6 @@
     <output-path>$PROJECT_DIR$/out/artifacts/QuickLook_jar</output-path>
     <root id="archive" name="QuickLook.jar">
       <element id="module-output" name="QuickLook" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../sdk/javafx-sdk-13.0.1/lib/javafx.graphics.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../sdk/javafx-sdk-13.0.1/lib/javafx.media.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../sdk/javafx-sdk-13.0.1/lib/javafx.swing.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../sdk/javafx-sdk-13.0.1/lib/javafx.web.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../sdk/javafx-sdk-13.0.1/lib/javafx.base.jar" path-in-jar="/" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/../../sdk/javafx-sdk-13.0.1/lib/javafx.controls.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
