@@ -28,6 +28,7 @@
     <change-notes><![CDATA[
     <ul><h3><b>0.9.3</b></h3>
       <li>Fixed support for AppCode 2020.1</li>
+      <li>Removed support for CLLocation, NSURL</li>
     </ul>
     <ul><h3><b>0.9.2</b></h3>
       <li>Fixed support for AppCode 2016.2 EAP 2</li>
