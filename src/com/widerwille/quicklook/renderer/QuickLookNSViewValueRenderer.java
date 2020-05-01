@@ -53,8 +53,6 @@ public class QuickLookNSViewValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
-
 	protected QuickLookNSViewValueRenderer(QuickLookValue type)
 	{
 		super(type);
@@ -82,7 +80,7 @@ public class QuickLookNSViewValueRenderer extends QuickLookValueRenderer
 
 				value.sendMessage("cacheDisplayInRect:((NSRect)[(NSView *)" + value.getPointer() + " bounds]) toBitmapImageRep:(NSBitmapImageRep *)" + bitmapRef.getPointer(), "void");
 
-				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getPointer() + " representationUsingType:4 properties:nil]");
+				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getPointer() + " representationUsingType:NSBitmapImageFileTypePNG properties:nil]");
 
 				if(!data.isValid() || !data.isPointer())
 					data = null;

@@ -12,10 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class QuickLookValue
 {
-	private QuickLookEvaluationContext context;
+	private final QuickLookEvaluationContext context;
 	private LLValue value;
 	private LLValueData valueData;
-	private CidrPhysicalValue physicalValue;
+	private final CidrPhysicalValue physicalValue;
 
 	public QuickLookValue(@Nullable CidrPhysicalValue physicalValue, @NotNull LLValue lldbValue, @NotNull LLValueData lldbValueData, @NotNull QuickLookEvaluationContext context)
 	{
@@ -95,7 +95,6 @@ public class QuickLookValue
 		return getName();
 	}
 
-
 	public boolean isKindOfClass(String className)
 	{
 		try
@@ -140,12 +139,11 @@ public class QuickLookValue
 	public void refresh()
 	{
 		String expression = value.getReferenceExpression();
-		if(expression != null && expression.length() > 0)
+		if(expression.length() > 0)
 		{
 			try
 			{
-				LLValue temp = context.getUnderlyingContext().evaluate(expression);
-				value = temp;
+				value = context.getUnderlyingContext().evaluate(expression);
 				valueData = null;
 			}
 			catch(Exception e)

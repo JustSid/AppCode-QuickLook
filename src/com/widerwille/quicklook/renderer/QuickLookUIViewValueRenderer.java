@@ -54,8 +54,6 @@ public class QuickLookUIViewValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
-
 	protected QuickLookUIViewValueRenderer(QuickLookValue type)
 	{
 		super(type);

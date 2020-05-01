@@ -1,7 +1,7 @@
 <idea-plugin version="2">
     <id>com.widerwille.quicklook</id>
     <name>QuickLook</name>
-    <version>0.9.2</version>
+    <version>0.9.3</version>
     <vendor email="justsid@widerwille.com" url="http://widerwille.com">Sidney Just</vendor>
 
     <description><![CDATA[
@@ -26,6 +26,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <ul><h3><b>0.9.3</b></h3>
+      <li>Fixed support for AppCode 2020.1</li>
+      <li>Removed support for CLLocation, NSURL</li>
+    </ul>
     <ul><h3><b>0.9.2</b></h3>
       <li>Fixed support for AppCode 2016.2 EAP 2</li>
     </ul>
@@ -49,8 +53,9 @@
     </change-notes>
 
 
-    <idea-version since-build="162"/>
+    <idea-version since-build="193.1784"/>
     <depends>com.intellij.modules.appcode</depends>
+    <depends>com.intellij.platform.images</depends>
 
     <extensionPoints>
         <extensionPoint qualifiedName="com.widerwille.quicklook.quickLookValueRendererFactory" interface="com.widerwille.quicklook.QuickLookValueRendererFactory" />

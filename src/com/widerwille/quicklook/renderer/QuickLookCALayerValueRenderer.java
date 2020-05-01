@@ -54,8 +54,6 @@ public class QuickLookCALayerValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
-
 	protected QuickLookCALayerValueRenderer(QuickLookValue type)
 	{
 		super(type);

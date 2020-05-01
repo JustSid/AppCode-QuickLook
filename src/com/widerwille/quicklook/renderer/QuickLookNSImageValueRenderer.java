@@ -53,8 +53,6 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 		}
 	}
 
-
-
 	protected QuickLookNSImageValueRenderer(QuickLookValue type)
 	{
 		super(type);
@@ -113,7 +111,7 @@ public class QuickLookNSImageValueRenderer extends QuickLookValueRenderer
 				cgImage.refresh();
 				bitmapRef.refresh();
 
-				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getName() + " representationUsingType:4 properties:nil]");
+				data = context.evaluate("(NSData *)[(NSBitmapImageRep *)" + bitmapRef.getName() + " representationUsingType:NSBitmapImageFileTypePNG properties:nil]");
 
 				if(!data.isValid() || !data.isPointer())
 					data = null;
